@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Created-By: Romenskij Dmitrij
+Main-Class: client.com.netcracker.romenskiy.Client
