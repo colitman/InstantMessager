@@ -1,4 +1,0 @@
-10-09-2013 11:17:20.721 main                 INFO         im.server.gui - GUI constructor started, assigning lists
-10-09-2013 11:17:20.723 main                 INFO         im.server.gui - Lists are assigned
-10-09-2013 11:17:20.732 AWT-EventQueue-0     INFO         im.server.gui - Starting to build the GUI window
-10-09-2013 11:17:20.845 AWT-EventQueue-0     INFO         im.server.gui - GUI window is built
