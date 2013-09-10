@@ -41,18 +41,7 @@ private static final History history = new History();
 			while(true) {
 				try {
 					s = ss.accept();
-					ClientThread client = new ClientThread(s, history, users);
-					//String name = client.getClientName();
-					// Messages messages = new Messages();
-					// messages.addObserver(client);
-					//users.add(client);
-					
-					// if(!history.containsKey(name)) {
-						// history.put(name, messages);
-					// } else {
-						// messages = history.get(name);
-					// }
-					
+					ClientThread client = new ClientThread(s, history, users);			
 				} catch (IOException ioe) {
 					if(s != null) {
 						try {

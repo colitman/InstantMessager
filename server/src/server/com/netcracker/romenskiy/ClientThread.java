@@ -18,13 +18,13 @@ import org.xml.sax.*;
 
 public class ClientThread extends Thread implements Observer, ServerInterface {
 	private Socket s = null;
-	private /* BufferedReader */InputStream in = null;
-	private /* PrintWriter  */OutputStream out = null;
+	private InputStream in = null;
+	private OutputStream out = null;
 	private Users users;
 	private static final Logger logger = Logger.getLogger("im.server");
 	private History history;
 	private String userName = "guest";
-	public Messages messages = null;
+	private Messages messages = null;
 	
 	public ClientThread(Socket socket, History history, Users users) throws IOException {
 		
@@ -33,10 +33,10 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		this.s = socket;
 		
 		logger.info("Getting the input stream...");
-		in = /* new BufferedReader(new InputStreamReader( */s.getInputStream()/* )) */;
+		in = s.getInputStream();
 		
 		logger.info("Getting the output stream...");
-		out = /* new PrintWriter(new BufferedWriter(new OutputStreamWriter( */s.getOutputStream()/* )), true) */;
+		out = s.getOutputStream();
 		
 		this.users = users;
 		
@@ -129,8 +129,6 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 	}
 	
 	public void send(Message message) throws IOException {
-		//out.println(message);
-		
 		try {
 			XMLUtils.sendMessage(message, out);
 		} catch (SAXException se) {
@@ -147,7 +145,7 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 	}
 	
 	public String toString() {
-		return /* s.getInetAddress() + ", " +  */getClientName();
+		return getClientName();
 	}
 	
 	public String getClientName() {
