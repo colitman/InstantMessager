@@ -28,6 +28,7 @@ public class Messages extends Observable {
 	}
 	
 	public List<Message> getLastFiveWith(String userName) {
+	
 		List<Message> lastFive = new ArrayList<Message>();
 		List<Message> temp = new ArrayList<Message>();
 		
