@@ -1,51 +1,62 @@
-04-09-2013 12:03:25.457 main                 WARN             im.server - Starting a server...
-04-09-2013 12:03:25.462 main                 WARN             im.server - Server started at 12345 port
-04-09-2013 12:03:29.459 main                 WARN             im.server - New client is trying to connect to the chat...
-04-09-2013 12:03:29.461 main                 WARN             im.server - Connection established with [/127.0.0.1, Thread-2]
-04-09-2013 12:03:31.593 Thread-2             WARN             im.server - Client /127.0.0.1, Thread-2 has been disconnected.
-04-09-2013 12:03:31.595 Thread-2             WARN             im.server - Socket with /127.0.0.1, Thread-2 has been closed.
-04-09-2013 12:04:17.130 main                 WARN             im.server - Starting a server...
-04-09-2013 12:04:17.134 main                 WARN             im.server - Server started at 12345 port
-04-09-2013 12:04:18.385 main                 WARN             im.server - New client is trying to connect to the chat...
-04-09-2013 12:04:18.387 main                 WARN             im.server - Connection established with [/127.0.0.1, Thread-2]
-04-09-2013 12:04:19.872 main                 WARN             im.server - New client is trying to connect to the chat...
-04-09-2013 12:04:19.873 main                 WARN             im.server - Connection established with [/127.0.0.1, Thread-3]
-04-09-2013 12:04:21.675 Thread-3             WARN             im.server - Client /127.0.0.1, Thread-3 has been disconnected.
-04-09-2013 12:04:21.676 Thread-3             WARN             im.server - Socket with /127.0.0.1, Thread-3 has been closed.
-04-09-2013 12:04:22.950 Thread-2             WARN             im.server - Client /127.0.0.1, Thread-2 has been disconnected.
-04-09-2013 12:04:22.951 Thread-2             WARN             im.server - Socket with /127.0.0.1, Thread-2 has been closed.
-04-09-2013 14:17:37.516 main                 WARN             im.server - Starting a server...
-04-09-2013 14:17:37.521 main                 WARN             im.server - Server started at 12345 port
-04-09-2013 14:18:09.370 main                 WARN             im.server - Starting a server...
-04-09-2013 14:18:09.374 main                 WARN             im.server - Server started at 12345 port
-04-09-2013 14:18:10.638 main                 WARN             im.server - New client is trying to connect to the chat...
-04-09-2013 14:18:10.640 main                 WARN             im.server - Connection established with [/127.0.0.1, Thread-2]
-04-09-2013 14:18:14.368 Thread-2             WARN             im.server - Client /127.0.0.1, Thread-2 has been disconnected.
-04-09-2013 14:18:14.369 Thread-2             WARN             im.server - Socket with /127.0.0.1, Thread-2 has been closed.
-04-09-2013 14:20:49.474 main                 WARN             im.server - Starting a server...
-04-09-2013 14:20:49.478 main                 WARN             im.server - Server started at 12345 port
-04-09-2013 14:20:57.395 main                 WARN             im.server - New client is trying to connect to the chat...
-04-09-2013 14:20:57.398 main                 WARN             im.server - Connection established with [/127.0.0.1, Thread-2]
-04-09-2013 14:38:13.851 main                 WARN             im.server - Starting a server...
-04-09-2013 14:38:13.855 main                 WARN             im.server - Server started at 12345 port
-04-09-2013 14:38:42.602 main                 WARN             im.server - Starting a server...
-04-09-2013 14:38:42.606 main                 WARN             im.server - Server started at 12345 port
-04-09-2013 14:38:44.104 main                 WARN             im.server - New client is trying to connect to the chat...
-04-09-2013 14:38:44.105 main                 WARN             im.server - Connection established with [/127.0.0.1, Thread-2]
-04-09-2013 14:38:48.941 main                 WARN             im.server - New client is trying to connect to the chat...
-04-09-2013 14:38:48.942 main                 WARN             im.server - Connection established with [/127.0.0.1, Thread-3]
-04-09-2013 14:38:50.161 main                 WARN             im.server - New client is trying to connect to the chat...
-04-09-2013 14:38:50.163 main                 WARN             im.server - Connection established with [/127.0.0.1, Thread-4]
-04-09-2013 14:40:03.270 main                 WARN             im.server - New client is trying to connect to the chat...
-04-09-2013 14:40:03.271 main                 WARN             im.server - Connection established with [/127.0.0.1, Thread-5]
-04-09-2013 14:40:05.292 main                 WARN             im.server - New client is trying to connect to the chat...
-04-09-2013 14:40:05.293 main                 WARN             im.server - Connection established with [/127.0.0.1, Thread-6]
-04-09-2013 14:40:32.546 Thread-6             WARN             im.server - Client /127.0.0.1, Thread-6 has been disconnected.
-05-09-2013 23:46:15.625 main                 WARN             im.server - Starting a server...
-05-09-2013 23:46:15.656 main                 WARN             im.server - Server started at 12345 port
-05-09-2013 23:46:20.609 main                 WARN             im.server - New client is trying to connect to the chat...
-05-09-2013 23:46:20.609 main                 WARN             im.server - Connection established with [/127.0.0.1, Thread-2]
-05-09-2013 23:46:28.750 Thread-2             WARN             im.server - Client /127.0.0.1, Thread-2 has been disconnected.
-05-09-2013 23:46:28.750 Thread-2             WARN             im.server - Socket with /127.0.0.1, Thread-2 has been closed.
-05-09-2013 23:47:02.500 main                 WARN             im.server - Starting a server...
-05-09-2013 23:47:02.515 main                 WARN             im.server - Server started at 12345 port
+09-09-2013 16:05:20.286 main                 WARN             im.server - Starting a server...
+09-09-2013 16:05:20.291 main                 WARN             im.server - Server started at 12345 port
+09-09-2013 16:05:22.047 main                 WARN             im.server - New client is trying to connect to the chat...
+09-09-2013 16:05:22.049 main                 WARN             im.server - Connection established with [guest]
+09-09-2013 16:05:28.309 main                 WARN             im.server - New client is trying to connect to the chat...
+09-09-2013 16:05:28.311 main                 WARN             im.server - Connection established with [guest]
+09-09-2013 16:06:05.860 Thread-2             ERROR            im.server - Unable to read XML Schema
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; Content is not allowed in prolog.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(Unknown Source)
+	at javax.xml.parsers.DocumentBuilder.parse(Unknown Source)
+	at server.com.netcracker.romenskiy.XMLUtils.receiveAuthorize(XMLUtils.java:139)
+	at server.com.netcracker.romenskiy.ClientThread.run(ClientThread.java:52)
+09-09-2013 16:06:23.287 Thread-2             ERROR            im.server - Unable to read XML Schema
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; Content is not allowed in prolog.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(Unknown Source)
+	at javax.xml.parsers.DocumentBuilder.parse(Unknown Source)
+	at server.com.netcracker.romenskiy.XMLUtils.receiveMessage(XMLUtils.java:56)
+	at server.com.netcracker.romenskiy.ClientThread.receive(ClientThread.java:113)
+	at server.com.netcracker.romenskiy.ClientThread.run(ClientThread.java:91)
+09-09-2013 16:06:23.289 Thread-2             WARN             im.server - Socket with guest has been closed.
+09-09-2013 16:06:44.839 Thread-3             ERROR            im.server - Unable to read XML Schema
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; Content is not allowed in prolog.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(Unknown Source)
+	at javax.xml.parsers.DocumentBuilder.parse(Unknown Source)
+	at server.com.netcracker.romenskiy.XMLUtils.receiveAuthorize(XMLUtils.java:139)
+	at server.com.netcracker.romenskiy.ClientThread.run(ClientThread.java:52)
+09-09-2013 16:09:13.711 Thread-3             ERROR            im.server - Unable to read XML Schema
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; Content is not allowed in prolog.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(Unknown Source)
+	at javax.xml.parsers.DocumentBuilder.parse(Unknown Source)
+	at server.com.netcracker.romenskiy.XMLUtils.receiveMessage(XMLUtils.java:56)
+	at server.com.netcracker.romenskiy.ClientThread.receive(ClientThread.java:113)
+	at server.com.netcracker.romenskiy.ClientThread.run(ClientThread.java:91)
+09-09-2013 16:09:13.712 Thread-3             WARN             im.server - Socket with guest has been closed.
+10-09-2013 10:09:23.484 main                 WARN             im.server - Starting a server...
+10-09-2013 10:09:23.490 main                 WARN             im.server - Server started at 12345 port
+10-09-2013 10:09:25.075 main                 WARN             im.server - New client is trying to connect to the chat...
+10-09-2013 10:09:25.077 main                 WARN             im.server - Connection established with [guest]
+10-09-2013 10:09:36.072 Thread-2             ERROR            im.server - Unable to read XML Schema
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; Content is not allowed in prolog.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(Unknown Source)
+	at javax.xml.parsers.DocumentBuilder.parse(Unknown Source)
+	at server.com.netcracker.romenskiy.XMLUtils.receiveAuthorize(XMLUtils.java:141)
+	at server.com.netcracker.romenskiy.ClientThread.run(ClientThread.java:52)
+10-09-2013 10:09:53.454 Thread-2             ERROR            im.server - Unable to read XML Schema
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; Content is not allowed in prolog.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(Unknown Source)
+	at javax.xml.parsers.DocumentBuilder.parse(Unknown Source)
+	at server.com.netcracker.romenskiy.XMLUtils.receiveMessage(XMLUtils.java:58)
+	at server.com.netcracker.romenskiy.ClientThread.receive(ClientThread.java:113)
+	at server.com.netcracker.romenskiy.ClientThread.run(ClientThread.java:91)
+10-09-2013 10:09:53.455 Thread-2             WARN             im.server - Socket with guest has been closed.
+10-09-2013 10:10:56.013 main                 WARN             im.server - Starting a server...
+10-09-2013 10:10:56.019 main                 WARN             im.server - Server started at 12345 port
+10-09-2013 10:24:41.218 main                 WARN             im.server - Starting a server...
+10-09-2013 10:24:41.223 main                 WARN             im.server - Server started at 12345 port

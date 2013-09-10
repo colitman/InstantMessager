@@ -42,17 +42,16 @@ private static final History history = new History();
 				try {
 					s = ss.accept();
 					ClientThread client = new ClientThread(s, history, users);
-					String name = client.getClientName();
-					Messages messages = new Messages();
-					messages.addObserver(client);
-					messages.addObserver(gui);
-					users.add(client);
+					//String name = client.getClientName();
+					// Messages messages = new Messages();
+					// messages.addObserver(client);
+					//users.add(client);
 					
-					if(!history.containsKey(name)) {
-						history.put(name, messages);
-					} else {
-						messages = history.get(name);
-					}
+					// if(!history.containsKey(name)) {
+						// history.put(name, messages);
+					// } else {
+						// messages = history.get(name);
+					// }
 					
 				} catch (IOException ioe) {
 					if(s != null) {

@@ -7,13 +7,13 @@ import server.com.netcracker.romenskiy.*;
 
 public class Messages extends Observable {
 
-	private LinkedList<String> list;
+	private LinkedList<Message> list;
 
 	public Messages() {
-		list = new LinkedList<String>();
+		list = new LinkedList<Message>();
 	}
 	
-	public void add(String message) {
+	public void add(Message message) {
 		list.addLast(message);
 		setChanged();
 		notifyObservers(message);
@@ -23,7 +23,24 @@ public class Messages extends Observable {
 		return list.size();
 	}
 	
-	public String getLast() {
+	public Message getLast() {
 		return list.getLast();
+	}
+	
+	public List<Message> getLastFiveWith(String userName) {
+		List<Message> lastFive = new LinkedList<Message>();
+		
+		int i = 0;
+		for(Message m:list) {
+			if(m.getFromUser() == userName || m.getToUser() == userName) {
+				lastFive.add(m);
+				i++;
+				if(i >= 5) {
+					break;
+				}
+			}
+		}
+		
+		return lastFive;
 	}
 }

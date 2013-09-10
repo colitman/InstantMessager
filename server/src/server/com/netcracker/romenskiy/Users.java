@@ -1,3 +1,7 @@
+/**
+*Class for storing the list of users, which are connected to the server
+*/
+
 package server.com.netcracker.romenskiy;
 
 import java.net.*;
@@ -7,27 +11,55 @@ import java.util.*;
 public class Users extends Observable {
 	private ArrayList<ClientThread> users;
 	
+	/**
+	*Creates an empty list of users
+	*/
 	public Users() {
 		users = new ArrayList<ClientThread>();
 	}
 	
+	/**
+	*Adds the new user to the list
+	*/
 	public void add(ClientThread ct) {
 		users.add(ct);
 		setChanged();
 		notifyObservers(ct);
 	}
 	
+	/**
+	*Removes a user from the list
+	*/
 	public void remove(ClientThread ct) {
 		users.remove(ct);
 		setChanged();
 		notifyObservers(ct);
 	}
 	
+	/**
+	*Returns the number of active users
+	*/
 	public int size() {
 		return users.size();
 	}
 	
+	/**
+	*Returns the instance of client object by the index number
+	*/
 	public ClientThread get(int index) {
 		return users.get(index);
+	}
+	
+	/**
+	*Returns a list of usernames
+	*/
+	public List<String> getUserNames() {
+		List<String> userNames = new ArrayList<String>();
+	
+		for(ClientThread ct:users) {
+			userNames.add(ct.getClientName());
+		}
+		
+		return userNames;
 	}
 }
