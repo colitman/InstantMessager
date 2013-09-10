@@ -1,4 +1,85 @@
-03-09-2013 17:37:22.660 [main] WARN im.server - Starting a server...
-03-09-2013 17:37:22.665 [main] WARN im.server - Server started at 12345 port
-10-09-2013 11:11:28.067 main                 WARN             im.server - Starting a server...
-10-09-2013 11:11:28.072 main                 WARN             im.server - Server started at 12345 port
+10-09-2013 11:17:20.732 main                 WARN             im.server - Starting a server...
+10-09-2013 11:17:20.738 main                 WARN             im.server - Server started at 12345 port
+10-09-2013 11:17:29.901 main                 WARN             im.server - New client is trying to connect to the chat...
+10-09-2013 11:17:29.904 main                 WARN             im.server - Connection established with [guest]
+10-09-2013 11:17:52.738 Thread-2             ERROR            im.server - IO Exception
+java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(Unknown Source)
+	at java.net.SocketInputStream.read(Unknown Source)
+	at java.net.SocketInputStream.read(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLEntityManager$RewindableInputStream.read(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLEntityManager.setupCurrentEntity(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLVersionDetector.determineDocVersion(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(Unknown Source)
+	at javax.xml.parsers.DocumentBuilder.parse(Unknown Source)
+	at server.com.netcracker.romenskiy.XMLUtils.receiveAuthorize(XMLUtils.java:141)
+	at server.com.netcracker.romenskiy.ClientThread.run(ClientThread.java:52)
+10-09-2013 11:17:52.773 Thread-2             ERROR            im.server - TransformerException
+javax.xml.transform.TransformerException: org.xml.sax.SAXException: Connection reset by peer: socket write error
+java.net.SocketException: Connection reset by peer: socket write error
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(Unknown Source)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(Unknown Source)
+	at server.com.netcracker.romenskiy.XMLUtils.transform(XMLUtils.java:205)
+	at server.com.netcracker.romenskiy.XMLUtils.sendUserNamesList(XMLUtils.java:116)
+	at server.com.netcracker.romenskiy.ClientThread.run(ClientThread.java:78)
+Caused by: org.xml.sax.SAXException: Connection reset by peer: socket write error
+java.net.SocketException: Connection reset by peer: socket write error
+	at com.sun.org.apache.xml.internal.serializer.ToStream.flushWriter(Unknown Source)
+	at com.sun.org.apache.xml.internal.serializer.ToXMLStream.endDocument(Unknown Source)
+	at com.sun.org.apache.xml.internal.serializer.ToUnknownStream.endDocument(Unknown Source)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(Unknown Source)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(Unknown Source)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transformIdentity(Unknown Source)
+	... 5 more
+Caused by: java.net.SocketException: Connection reset by peer: socket write error
+	at java.net.SocketOutputStream.socketWrite0(Native Method)
+	at java.net.SocketOutputStream.socketWrite(Unknown Source)
+	at java.net.SocketOutputStream.write(Unknown Source)
+	at com.sun.org.apache.xml.internal.serializer.WriterToUTF8Buffered.flushBuffer(Unknown Source)
+	at com.sun.org.apache.xml.internal.serializer.WriterToUTF8Buffered.flush(Unknown Source)
+	... 11 more
+---------
+org.xml.sax.SAXException: Connection reset by peer: socket write error
+java.net.SocketException: Connection reset by peer: socket write error
+	at com.sun.org.apache.xml.internal.serializer.ToStream.flushWriter(Unknown Source)
+	at com.sun.org.apache.xml.internal.serializer.ToXMLStream.endDocument(Unknown Source)
+	at com.sun.org.apache.xml.internal.serializer.ToUnknownStream.endDocument(Unknown Source)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(Unknown Source)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(Unknown Source)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transformIdentity(Unknown Source)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(Unknown Source)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(Unknown Source)
+	at server.com.netcracker.romenskiy.XMLUtils.transform(XMLUtils.java:205)
+	at server.com.netcracker.romenskiy.XMLUtils.sendUserNamesList(XMLUtils.java:116)
+	at server.com.netcracker.romenskiy.ClientThread.run(ClientThread.java:78)
+Caused by: java.net.SocketException: Connection reset by peer: socket write error
+	at java.net.SocketOutputStream.socketWrite0(Native Method)
+	at java.net.SocketOutputStream.socketWrite(Unknown Source)
+	at java.net.SocketOutputStream.write(Unknown Source)
+	at com.sun.org.apache.xml.internal.serializer.WriterToUTF8Buffered.flushBuffer(Unknown Source)
+	at com.sun.org.apache.xml.internal.serializer.WriterToUTF8Buffered.flush(Unknown Source)
+	... 11 more
+---------
+java.net.SocketException: Connection reset by peer: socket write error
+	at java.net.SocketOutputStream.socketWrite0(Native Method)
+	at java.net.SocketOutputStream.socketWrite(Unknown Source)
+	at java.net.SocketOutputStream.write(Unknown Source)
+	at com.sun.org.apache.xml.internal.serializer.WriterToUTF8Buffered.flushBuffer(Unknown Source)
+	at com.sun.org.apache.xml.internal.serializer.WriterToUTF8Buffered.flush(Unknown Source)
+	at com.sun.org.apache.xml.internal.serializer.ToStream.flushWriter(Unknown Source)
+	at com.sun.org.apache.xml.internal.serializer.ToXMLStream.endDocument(Unknown Source)
+	at com.sun.org.apache.xml.internal.serializer.ToUnknownStream.endDocument(Unknown Source)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(Unknown Source)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(Unknown Source)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transformIdentity(Unknown Source)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(Unknown Source)
+	at com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(Unknown Source)
+	at server.com.netcracker.romenskiy.XMLUtils.transform(XMLUtils.java:205)
+	at server.com.netcracker.romenskiy.XMLUtils.sendUserNamesList(XMLUtils.java:116)
+	at server.com.netcracker.romenskiy.ClientThread.run(ClientThread.java:78)
+10-09-2013 11:17:52.785 Thread-2             WARN             im.server - Client guest has been disconnected.
+10-09-2013 11:17:52.785 Thread-2             WARN             im.server - Socket with guest has been closed.
