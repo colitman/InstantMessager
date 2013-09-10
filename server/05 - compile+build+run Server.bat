@@ -1,5 +1,8 @@
-javac -d cls src\server\com\netcracker\romenskiy\*.java src\client\com\netcracker\romenskiy\*.java
+javac -Xlint:unchecked -d cls -classpath bin\lib\log4j-1.2.16.jar src\server\com\netcracker\romenskiy\gui\*.java src\server\com\netcracker\romenskiy\gui\model\*.java src\server\com\netcracker\romenskiy\messages\*.java src\server\com\netcracker\romenskiy\*.java
+pause
+
 jar cmf res\smanifest.mf bin\Server.jar -C cls\ server
-jar cmf res\cmanifest.mf bin\Client.jar -C cls\ client
+pause
+
 java -jar bin\Server.jar
 pause
