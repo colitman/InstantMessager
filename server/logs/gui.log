@@ -26,3 +26,7 @@
 10-09-2013 11:11:55.282 main                 INFO         im.server.gui - Lists are assigned
 10-09-2013 11:11:55.288 AWT-EventQueue-0     INFO         im.server.gui - Starting to build the GUI window
 10-09-2013 11:11:55.378 AWT-EventQueue-0     INFO         im.server.gui - GUI window is built
+10-09-2013 12:08:03.407 main                 INFO         im.server.gui - GUI constructor started, assigning lists
+10-09-2013 12:08:03.408 main                 INFO         im.server.gui - Lists are assigned
+10-09-2013 12:08:03.415 AWT-EventQueue-0     INFO         im.server.gui - Starting to build the GUI window
+10-09-2013 12:08:03.504 AWT-EventQueue-0     INFO         im.server.gui - GUI window is built
