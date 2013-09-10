@@ -47,49 +47,11 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 	}
 	
 	public void run() {
-		try {
-			logger.info("Waiting for client's name");
-			XMLUtils.receiveAuthorize(userName, in);
-			logger.info("Username received");
-		} catch (SAXException se) {
-			logger.error("Unable to read XML Schema", se);
-		} catch (IOException io) {
-			logger.error("IO Exception", io);
-		} catch (ParserConfigurationException pce) {
-			logger.error("ParcerConfigurationException", pce);
-		}
 		
-		users.add(this);
-		logger.info("User has been added to the userlist.");
-		
-		messages = new Messages();
-		messages.addObserver(this);
-		logger.info("Message list created");
-		
-		if(!history.containsKey(userName)) {
-			history.put(userName, messages);
-		} else {
-			messages = history.get(userName);
-		}
-		logger.info("Message list assigned to history");
-		
-		try {
-			logger.info("Sending the list of users.");
-			XMLUtils.sendUserNamesList(users.getUserNames(), out);
-			logger.info("Userlist has been sent");
-		} catch (SAXException se) {
-			logger.error("Unable to read XML Schema", se);
-		} catch (IOException io) {
-			logger.error("IO Exception (sendusernames)", io);
-		} catch (ParserConfigurationException pce) {
-			logger.error("ParcerConfigurationException", pce);
-		} catch (TransformerConfigurationException tce) {
-			logger.error("TransformerConfigurationException", tce);
-		} catch (TransformerException te) {
-			logger.error("TransformerException", te);
-		}
+		prepareClient();
 
 		logger.info("Starting normal session.");
+		
 		try {
 			while(true) {
 				this.receive();
@@ -141,6 +103,43 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 			logger.error("TransformerException", te);
 		} catch (ParseException pe) {
 			logger.error("ParseException", pe);
+		}
+	}
+	
+	private void prepareClient() {
+		try {
+			logger.info("Waiting for client's name");
+			XMLUtils.receiveAuthorize(userName, in);
+			logger.info("Username received");
+			
+			users.add(this);
+			logger.info("User has been added to the userlist.");
+			
+			messages = new Messages();
+			messages.addObserver(this);
+			logger.info("Message list created");
+			
+			if(!history.containsKey(userName)) {
+				history.put(userName, messages);
+			} else {
+				messages = history.get(userName);
+			}
+			logger.info("Message list assigned to history");
+			
+			logger.info("Sending the list of users.");
+			XMLUtils.sendUserNamesList(users.getUserNames(), out);
+			logger.info("Userlist has been sent");
+			
+		} catch (SAXException se) {
+			logger.error("Unable to read XML Schema", se);
+		} catch (IOException io) {
+			logger.error("IO Exception", io);
+		} catch (ParserConfigurationException pce) {
+			logger.error("ParcerConfigurationException", pce);
+		} catch (TransformerConfigurationException tce) {
+			logger.error("TransformerConfigurationException", tce);
+		} catch (TransformerException te) {
+			logger.error("TransformerException", te);
 		}
 	}
 	
