@@ -145,7 +145,7 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 	}
 	
 	public String toString() {
-		return getClientName();
+		return getClientName() + "[" + s.getInetAddress() + "]";
 	}
 	
 	public String getClientName() {
