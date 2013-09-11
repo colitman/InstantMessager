@@ -5,6 +5,8 @@ import java.io.*;
 
 import javax.swing.*;
 
+//comment
+
 public class Client implements ClientInterface {
 	
 	public static void main(String[] args) {
