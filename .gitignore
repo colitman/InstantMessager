@@ -3,6 +3,7 @@
 
 # Package Files #
 Server.jar
+Client.jar
 
 # Log files #
 *.log
