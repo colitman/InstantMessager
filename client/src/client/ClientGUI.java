@@ -69,6 +69,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		if (source instanceof HistoryThread) {
 			if (message instanceof Map) {
 				//Map<> map = (Map<>) message;
+			}
 		}
 	}
 	
