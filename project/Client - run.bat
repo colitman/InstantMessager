@@ -1,2 +1,2 @@
-java -jar bin\Client.jar
+java -jar Client.jar
 @pause
