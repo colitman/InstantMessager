@@ -1,2 +1,0 @@
-javadoc -d docs\ src\taskmanager\action\handlers\*.java src\taskmanager\action\*.java src\taskmanager\model\*.java src\taskmanager\view\*.java src\taskmanager\controller\*.java src\taskmanager\main\*.java
-@pause
