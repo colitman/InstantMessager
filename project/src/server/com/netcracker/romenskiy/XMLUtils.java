@@ -16,7 +16,7 @@ import org.w3c.dom.*;
 import org.xml.sax.*;
 
 /**
- * Contains methods to send/receive messages, authorization, active users list by XML
+ * Contains methods to send/receive messages, authorization, active users list, history by XML
  */
 public class XMLUtils {
 
@@ -177,6 +177,23 @@ public class XMLUtils {
 		Element code = (Element) answerElement.getFirstChild();
 		
 		answer = code.getFirstChild().getNodeValue();
+	}
+	
+	public static void sendHistory(List<String> messages, OutputStream output) throws SAXException, IOException, ParserConfigurationException,
+		TransformerConfigurationException, TransformerException {
+		
+		Schema schema = getSchema();
+		
+		Document document = getDocumentBuilder(schema).newDocument();
+		
+		Element root = document.createElement("document");
+		document.appendChild(root);
+		Element history = document.createElement("history");
+		root.appendChild(history);
+		for (String str : messages) {
+			Element message = document.createElement("message");
+			//.......
+		}
 	}
 	
 	private static DocumentBuilder getDocumentBuilder(Schema schema) throws ParserConfigurationException {

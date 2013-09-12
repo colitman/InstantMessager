@@ -28,7 +28,7 @@ public class XMLUtils {
 		Element root = document.createElement("document");
 		document.appendChild(root);
 		Element messageElement = document.createElement("message");
-		document.appendChild(root);
+		root.appendChild(messageElement);
 		Element time = document.createElement("time");
 		DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
 		time.appendChild(document.createTextNode(dateFormat.format(new Date())));
