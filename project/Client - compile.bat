@@ -1,2 +1,2 @@
-javac -d cls -sourcepath src -Xlint src\client\*.java
+javac -d cls -classpath lib\XMLUtils.jar -sourcepath src -Xlint src\client\*.java
 @pause

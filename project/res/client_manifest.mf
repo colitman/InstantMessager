@@ -1,3 +1,4 @@
 Manifest-Version: 1.0
 Created-By: Polyakov_Oleh
 Main-Class: client.Client
+Class-Path: lib/XMLUtils.jar
