@@ -4,6 +4,7 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 import server.com.netcracker.romenskiy.*;
+import util.xml.*;
 
 public class Messages extends Observable {
 

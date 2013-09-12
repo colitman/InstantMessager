@@ -4,7 +4,9 @@
 
 package server.com.netcracker.romenskiy;
 
-import server.com.netcracker.romenskiy.messages.*;
+import util.xml.*;
+
+//import server.com.netcracker.romenskiy.messages.*;
 
 public interface ServerInterface {
 

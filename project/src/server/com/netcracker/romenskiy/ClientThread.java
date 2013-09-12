@@ -7,6 +7,8 @@ import java.text.*;
 import org.apache.log4j.*;
 import server.com.netcracker.romenskiy.messages.*;
 
+import util.xml.*;
+
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
@@ -76,7 +78,7 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		Message message = new Message();
 		
 		try {
-			XMLUtils.receiveMessage(message, in);
+			Operations.receiveMessage(message, in);
 			logger.info("New message received.");
 		} catch (SAXException se) {
 			logger.error("Unable to read XML Schema", se);
@@ -92,7 +94,7 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 	
 	public void send(Message message) throws IOException {
 		try {
-			XMLUtils.sendMessage(message, out);
+			Operations.sendMessage(message, out);
 		} catch (SAXException se) {
 			logger.error("Unable to read XML Schema", se);
 		} catch (ParserConfigurationException pce) {
@@ -109,7 +111,7 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 	private void prepareClient() {
 		try {
 			logger.info("Waiting for client's name");
-			XMLUtils.receiveAuthorize(userName, in);
+			Operations.receiveAuthorize(userName, in);
 			logger.info("Username received");
 			
 			users.add(this);
@@ -127,7 +129,7 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 			logger.info("Message list assigned to history");
 			
 			logger.info("Sending the list of users.");
-			XMLUtils.sendUserNamesList(users.getUserNames(), out);
+			Operations.sendUserNamesList(users.getUserNames(), out);
 			logger.info("Userlist has been sent");
 			
 		} catch (SAXException se) {
