@@ -123,7 +123,7 @@ public class Operations {
 		Element root = document.createElement("document");
 		document.appendChild(root);
 		Element authorize = document.createElement("authorize");
-		document.appendChild(authorize);
+		root.appendChild(authorize);
 		Element user = document.createElement("userName");
 		user.appendChild(document.createTextNode(userName));
 		authorize.appendChild(user);

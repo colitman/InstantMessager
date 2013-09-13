@@ -14,6 +14,8 @@ import javax.xml.transform.stream.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
+import util.xml.*;
+
 public class OutputThread implements Runnable {
 
 	private Socket socket;
@@ -55,7 +57,7 @@ public class OutputThread implements Runnable {
 			
 			Message message = new Message(time, from, to, text);
 			
-			XMLUtils.sendMessage(message, output);
+			Operations.sendMessage(message, output);
 		}
 	}
 }

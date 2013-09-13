@@ -11,6 +11,8 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 
+import util.xml.*;
+
 public class ClientGUI extends JFrame implements Observer, Runnable {
 	
 	private static final long serialVersionUID = 4229L;
@@ -66,11 +68,11 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				throw new IllegalArgumentException();
 			}
 		}
-		if (source instanceof HistoryThread) {
-			if (message instanceof Map) {
-				//Map<> map = (Map<>) message;
-			}
-		}
+		// if (source instanceof HistoryThread) {
+			// if (message instanceof Map) {
+				// Map<> map = (Map<>) message;
+			// }
+		// }
 	}
 	
 	@Override
@@ -111,8 +113,8 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 			public void valueChanged(ListSelectionEvent event) {
 				String name = users.getSelectedValue();
 				
-				XMLUtils.connectUser(String userName, scoket.getOutputStream());
-				XMLUtils.receiveHistory(Map history, socket.getInputStream());
+				//XMLUtils.connectUser(String userName, scoket.getOutputStream());
+				//XMLUtils.receiveHistory(Map history, socket.getInputStream());
 			}
 		};
 		

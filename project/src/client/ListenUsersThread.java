@@ -5,6 +5,8 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import util.xml.*;
+
 import javax.swing.*;
 import javax.xml.parsers.*;
 
@@ -41,7 +43,7 @@ public class ListenUsersThread extends Observable implements Runnable {
 		while (true) {
 			List<String> users = new ArrayList<String>();
 			
-			XMLUtils.receiveUserNamesList(users, input);
+			Operations.receiveUserNamesList(users, input);
 			
 			setChanged();
 			notifyObservers(users);

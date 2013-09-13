@@ -11,6 +11,8 @@ import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
+import util.xml.*;
+
 public class InputThread extends Observable implements Runnable {
 	
 	private Socket socket;
@@ -40,7 +42,7 @@ public class InputThread extends Observable implements Runnable {
 		while (true) {
 			Message message = null;
 			
-			XMLUtils.receiveMessage(message, input);
+			Operations.receiveMessage(message, input);
 			
 			setChanged();
 			notifyObservers(message);

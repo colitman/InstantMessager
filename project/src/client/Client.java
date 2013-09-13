@@ -5,6 +5,8 @@ import java.io.*;
 
 import javax.swing.*;
 
+import util.xml.*;
+
 //comment
 
 public class Client implements ClientInterface {
@@ -22,14 +24,14 @@ public class Client implements ClientInterface {
 			OutputStream out = socket.getOutputStream();
 			
 			String name = JOptionPane.showInputDialog("Enter name");
-			XMLUtils.sendAuthorize(name, out);
+			Operations.sendAuthorize(name, out);
 			String answer = null;
-			XMLUtils.receiveAnswer(answer, in);
+			Operations.receiveAnswer(answer, in);
 			
 			while (!answer.contains("accept")) {
 				name = JOptionPane.showInputDialog("Please enter a another name");
-				XMLUtils.sendAuthorize(name, out);
-				XMLUtils.receiveAnswer(answer, in);
+				Operations.sendAuthorize(name, out);
+				Operations.receiveAnswer(answer, in);
 			}
 			
 			writer = new PipedWriter();
@@ -60,9 +62,13 @@ public class Client implements ClientInterface {
 			System.out.println("Error: Unknown host");
 			System.out.println("Please check your internet connection");
 			
-			socket.close();
-			writer.close();
-			reader.close();
+			try {
+				socket.close();
+				writer.close();
+				reader.close();
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
 		} 
 	}
 }
