@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Created-By: Romenskij Dmitrij
+Main-Class: server.com.netcracker.romenskiy.Server
+Class-Path: lib/log4j-1.2.16.jar lib/XMLUtils.jar
