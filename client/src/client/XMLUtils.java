@@ -190,9 +190,49 @@ public class XMLUtils {
 		root.appendChild(history);
 		for (String str : messages) {
 			Element message = document.createElement("message");
-			//.......
+			message.appendChild(document.createTextNode(str));
+			root.appendChild(message);
+		}
+		
+		DOMSource source = validate(document, schema);
+		
+		transform(source, output);
+	}
+	
+	public static void receiveHistory(List<String> messages, InputStream input) throws SAXException, IOException, ParserConfigurationException {
+		Schema schema = getSchema();
+		
+		Document document = getDocumentBuilder().parse(input);
+		
+		Element root = document.getDocumentElement();
+		Element history = (Element) root.getFirstChild();
+		messages.removeAll();
+		for (Element message = (Element) history.getFirstChild(); message != null; message = (Element) history.getNextSubling()) {
+			messages.add(message.getFirstChild().getNodeValue());
 		}
 	}
+	
+	public static void sendConnectUser(String name, OutputStream output) throws SAXException, IOException, ParserConfigurationException,
+		TransformerConfigurationException, TransformerException {
+		
+		Schema schema = getSchema();
+		
+		Document document = getDocumentBuilder().newDocument();
+		
+		Element root = document.createElement("root");
+		document.appendChild(root);
+		Element connectUser = document.createElement("connectUser");
+		root.appendChild(connectUser);
+		Element nameElement = document.createElement("name");
+		nameElement.appendChild(document.createTextNode(name));
+		connectUser.appendChild(nameElement);
+		
+		DOMSource source = validate(document, schema);
+		
+		transform(source, output);
+	}
+	
+	
 	
 	private static DocumentBuilder getDocumentBuilder(Schema schema) throws ParserConfigurationException {
 		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();

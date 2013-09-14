@@ -111,8 +111,8 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 			public void valueChanged(ListSelectionEvent event) {
 				String name = users.getSelectedValue();
 				
-				XMLUtils.connectUser(String userName, scoket.getOutputStream());
-				XMLUtils.receiveHistory(Map history, socket.getInputStream());
+				//XMLUtils.connectUser(String userName, scoket.getOutputStream());
+				//XMLUtils.receiveHistory(Map history, socket.getInputStream());
 			}
 		};
 		
