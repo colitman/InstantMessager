@@ -18,6 +18,25 @@ import org.xml.sax.*;
  */
 public class Operations {
 
+	private static String DOMtoString(DOMSource source) {
+		try
+        {
+           //DOMSource domSource = new DOMSource(doc);
+           StringWriter writer = new StringWriter();
+           StreamResult result = new StreamResult(writer);
+           TransformerFactory tf = TransformerFactory.newInstance();
+           Transformer transformer = tf.newTransformer();
+           transformer.transform(source, result);
+           writer.flush();
+           return writer.toString();
+        }
+        catch(TransformerException ex)
+        {
+           ex.printStackTrace();
+           return null;
+        }
+	}
+
 	public static void sendMessage(Message message, OutputStream output) throws ParserConfigurationException,
 			TransformerConfigurationException, ParseException, TransformerException, SAXException, IOException {
 		
@@ -116,6 +135,7 @@ public class Operations {
 	
 	public static void sendAuthorize(String userName, OutputStream output) throws ParserConfigurationException, SAXException, IOException, 
 			TransformerConfigurationException, TransformerException {
+			
 		Schema schema = getSchema();
 		
 		Document document = getDocumentBuilder(schema).newDocument();
@@ -130,19 +150,24 @@ public class Operations {
 		
 		DOMSource source = validate(document, schema);
 		
-		transform(source, output);
+		DataOutputStream dos = new DataOutputStream(output);
+		String send = DOMtoString(source);
+		dos.writeUTF(send);
+		dos.flush();
 	}
 	
-	public static void receiveAuthorize(String userName, InputStream input) throws SAXException, IOException, ParserConfigurationException {
+	public static String receiveAuthorize(DataInputStream input) throws SAXException, IOException, ParserConfigurationException {
+		String receive = input.readUTF();
+	
 		Schema schema = getSchema();
 		
-		Document document = getDocumentBuilder(schema).parse(input);
+		Document document = getDocumentBuilder(schema).parse(new InputSource(new StringReader(receive)));
 		
 		Element root = document.getDocumentElement();
 		Element authorize = (Element) root.getFirstChild();
 		Element user = (Element) authorize.getFirstChild();
 		
-		userName = user.getFirstChild().getNodeValue();
+		return user.getFirstChild().getNodeValue();
 	}
 	
 	public static void sendAnswer(String answer, OutputStream output) throws ParserConfigurationException, SAXException, IOException,

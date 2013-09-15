@@ -20,8 +20,8 @@ import org.xml.sax.*;
 
 public class ClientThread extends Thread implements Observer, ServerInterface {
 	private Socket s = null;
-	private InputStream in = null;
-	private OutputStream out = null;
+	private DataInputStream in = null;
+	private DataOutputStream out = null;
 	private Users users;
 	private static final Logger logger = Logger.getLogger("im.server");
 	private History history;
@@ -35,10 +35,10 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		this.s = socket;
 		
 		logger.info("Getting the input stream...");
-		in = s.getInputStream();
+		in = new DataInputStream(s.getInputStream());
 		
 		logger.info("Getting the output stream...");
-		out = s.getOutputStream();
+		out = new DataOutputStream(s.getOutputStream());
 		
 		this.users = users;
 		
@@ -108,10 +108,14 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		}
 	}
 	
+	private void setClientName(String userName) {
+		this.userName = userName;
+	}
+	
 	private void prepareClient() {
 		try {
 			logger.info("Waiting for client's name");
-			Operations.receiveAuthorize(userName, in);
+			setClientName(Operations.receiveAuthorize(in));
 			logger.info("Username received");
 			
 			users.add(this);
