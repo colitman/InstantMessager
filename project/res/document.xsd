@@ -51,7 +51,7 @@
   
   <xs:complexType name="historyType">
 	<xs:sequence>
-	  <xs:element name="message" type="xs:string" minOccurs="0" maxOccurs="onbounded"/>
+	  <xs:element name="message" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 	</xs:sequence>
   </xs:complexType>
   
