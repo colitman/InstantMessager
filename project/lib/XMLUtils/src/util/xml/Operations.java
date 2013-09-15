@@ -202,12 +202,12 @@ public class Operations {
 	public static void receiveHistory(List<String> messages, InputStream input) throws SAXException, IOException, ParserConfigurationException {
 		Schema schema = getSchema();
 		
-		Document document = getDocumentBuilder().parse(input);
+		Document document = getDocumentBuilder(schema).parse(input);
 		
 		Element root = document.getDocumentElement();
 		Element history = (Element) root.getFirstChild();
-		messages.removeAll();
-		for (Element message = (Element) history.getFirstChild(); message != null; message = (Element) history.getNextSubling()) {
+		messages.clear();
+		for (Element message = (Element) history.getFirstChild(); message != null; message = (Element) history.getNextSibling()) {
 			messages.add(message.getFirstChild().getNodeValue());
 		}
 	}
@@ -217,7 +217,7 @@ public class Operations {
 		
 		Schema schema = getSchema();
 		
-		Document document = getDocumentBuilder().newDocument();
+		Document document = getDocumentBuilder(schema).newDocument();
 		
 		Element root = document.createElement("root");
 		document.appendChild(root);
@@ -235,11 +235,11 @@ public class Operations {
 	public static void receiveConnectUser(String name, InputStream input) throws SAXException, IOException, ParserConfigurationException {
 		Schema schema = getSchema();
 		
-		Document document = getDocumentBuilder().parse(input);
+		Document document = getDocumentBuilder(schema).parse(input);
 		
 		Element root = document.getDocumentElement();
-		Element connectUser = root.getFirstChild();
-		Element nameElement = connectUser.getFirstChild();
+		Element connectUser = (Element) root.getFirstChild();
+		Element nameElement = (Element) connectUser.getFirstChild();
 		name = nameElement.getFirstChild().getNodeValue();
 	}
 	
