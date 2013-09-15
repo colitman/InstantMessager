@@ -232,7 +232,16 @@ public class Operations {
 		transform(source, output);
 	}
 	
-	
+	public static void receiveConnectUser(String name, InputStream input) throws SAXException, IOException, ParserConfigurationException {
+		Schema schema = getSchema();
+		
+		Document document = getDocumentBuilder().parse(input);
+		
+		Element root = document.getDocumentElement();
+		Element connectUser = root.getFirstChild();
+		Element nameElement = connectUser.getFirstChild();
+		name = nameElement.getFirstChild().getNodeValue();
+	}
 	
 	private static DocumentBuilder getDocumentBuilder(Schema schema) throws ParserConfigurationException {
 		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();

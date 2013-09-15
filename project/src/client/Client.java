@@ -7,8 +7,6 @@ import javax.swing.*;
 
 import util.xml.*;
 
-//comment
-
 public class Client implements ClientInterface {
 	
 	public static void main(String[] args) {

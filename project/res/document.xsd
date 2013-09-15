@@ -9,6 +9,8 @@
         <xs:element name="userList" type="userListType"/>
         <xs:element name="authorize" type="authorizeType"/>
 		<xs:element name="answer" type="answerType"/>
+		<xs:element name="connectUser" type="connectUserType"/>
+		<xs:element name="history" type="historyType"/>
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -40,6 +42,19 @@
 	  <xs:element name="code" type="xs:string"/>
 	</xs:sequence>
   </xs:complexType>
+  
+  <xs:complexType name="connectUserType">
+	<xs:sequence>
+	  <xs:element name="name" type="xs:string"/>
+	</xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="historyType">
+	<xs:sequence>
+	  <xs:element name="message" type="xs:string" minOccurs="0" maxOccurs="onbounded"/>
+	</xs:sequence>
+  </xs:complexType>
+  
 </xs:schema>
 
 
