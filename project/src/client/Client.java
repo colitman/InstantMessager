@@ -7,6 +7,9 @@ import javax.swing.*;
 
 import util.xml.*;
 
+import client.gui.*;
+import client.thread.*;
+
 public class Client implements ClientInterface {
 	
 	public static void main(String[] args) {
@@ -18,8 +21,8 @@ public class Client implements ClientInterface {
 		try {
 			
 			socket = new Socket(IP, PORT);
-			InputStream in = socket.getInputStream();
-			OutputStream out = socket.getOutputStream();
+			DataInputStream in = new DataInputStream(socket.getInputStream());
+			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 			
 			String name = JOptionPane.showInputDialog("Enter name");
 			Operations.sendAuthorize(name, out);
@@ -27,7 +30,7 @@ public class Client implements ClientInterface {
 			Operations.receiveAnswer(answer, in);
 			
 			while (!answer.contains("accept")) {
-				name = JOptionPane.showInputDialog("Please enter a another name");
+				name = JOptionPane.showInputDialog("Please enter another name");
 				Operations.sendAuthorize(name, out);
 				Operations.receiveAnswer(answer, in);
 			}
@@ -37,14 +40,14 @@ public class Client implements ClientInterface {
 			
 			PrintWriter bufWriter = new PrintWriter(new BufferedWriter(writer), true);
 			BufferedReader bufReader = new BufferedReader(reader);
-		
+			
 			ClientGUI gui = new ClientGUI(bufWriter);			
 			SwingUtilities.invokeLater(gui);
-		
+			
 			OutputThread output = new OutputThread(socket, bufReader);
 			Thread outputThread = new Thread(output);
 			outputThread.start();
-		
+			
 			InputThread input = new InputThread(socket);
 			Thread inputThread = new Thread(input);
 			inputThread.start();
@@ -52,7 +55,7 @@ public class Client implements ClientInterface {
 			ListenUsersThread listenUsers = new ListenUsersThread(socket);
 			Thread listenThread = new Thread(listenUsers);
 			listenThread.start();
-		
+			
 			input.addObserver(gui);
 			listenUsers.addObserver(gui);
 		

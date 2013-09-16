@@ -1,4 +1,4 @@
-package client;
+package client.thread;
 
 import java.net.*;
 import java.util.*;

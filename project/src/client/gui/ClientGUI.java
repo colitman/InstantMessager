@@ -1,4 +1,4 @@
-package client;
+package client.gui;
 
 import java.io.*;
 import java.util.*;
@@ -12,6 +12,8 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 
 import util.xml.*;
+
+import client.thread.*;
 
 public class ClientGUI extends JFrame implements Observer, Runnable {
 	
