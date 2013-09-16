@@ -16,12 +16,12 @@ import org.xml.sax.*;
 public class ListenUsersThread extends Observable implements Runnable {
 	
 	private Socket socket;
-	private InputStream input;
+	private DataInputStream input;
 	
 	public ListenUsersThread(Socket socket) throws IOException {
 		this.socket = socket;
 		
-		input = socket.getInputStream();
+		input = new DataInputStream(socket.getInputStream());
 	}
 	
 	@Override

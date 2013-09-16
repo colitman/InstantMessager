@@ -18,26 +18,7 @@ import org.xml.sax.*;
  */
 public class Operations {
 
-	private static String DOMtoString(DOMSource source) {
-		try
-        {
-           //DOMSource domSource = new DOMSource(doc);
-           StringWriter writer = new StringWriter();
-           StreamResult result = new StreamResult(writer);
-           TransformerFactory tf = TransformerFactory.newInstance();
-           Transformer transformer = tf.newTransformer();
-           transformer.transform(source, result);
-           writer.flush();
-           return writer.toString();
-        }
-        catch(TransformerException ex)
-        {
-           ex.printStackTrace();
-           return null;
-        }
-	}
-
-	public static void sendMessage(Message message, OutputStream output) throws ParserConfigurationException,
+	public static void sendMessage(Message message, DataOutputStream output) throws ParserConfigurationException,
 			TransformerConfigurationException, ParseException, TransformerException, SAXException, IOException {
 		
 		Schema schema = getSchema();
@@ -64,15 +45,19 @@ public class Operations {
 
 		DOMSource source = validate(document, schema);
 		
-		transform(source, output);
+		String send = DOMtoString(source);
+		output.writeUTF(send);
+		output.flush();
 	}
 	
-	public static void receiveMessage(Message message, InputStream input) throws ParserConfigurationException,
+	public static Message receiveMessage(DataInputStream input) throws ParserConfigurationException,
 			IOException, ParseException, SAXException {
 		
+		String receive = input.readUTF();
+	
 		Schema schema = getSchema();
 		
-		Document document = getDocumentBuilder(schema).parse(input); 
+		Document document = getDocumentBuilder(schema).parse(new InputSource(new StringReader(receive))); 
 			
 		Element root = document.getDocumentElement();
 		Element messageElement = (Element) root.getFirstChild();
@@ -86,15 +71,17 @@ public class Operations {
 		Element textElement = (Element) childs.item(3);
 		String text = textElement.getFirstChild().getNodeValue();
 
-		message = new Message(DateFormat.getDateInstance().parse(time), from, to, text);
+		return new Message(DateFormat.getDateInstance().parse(time), from, to, text);
 	}
 	
-	public static void receiveUserNamesList(List<String> userNames, InputStream input) throws ParserConfigurationException,
+	public static void receiveUserNamesList(List<String> userNames, DataInputStream input) throws ParserConfigurationException,
 			SAXException, IOException {
 		
+		String receive = input.readUTF();
+	
 		Schema schema = getSchema();
 		
-		Document document = getDocumentBuilder(schema).parse(input);
+		Document document = getDocumentBuilder(schema).parse(new InputSource(new StringReader(receive)));
 		
 		Element root = document.getDocumentElement();		
 		Element userList = (Element) root.getFirstChild();
@@ -108,7 +95,7 @@ public class Operations {
 		}	
 	}
 	
-	public static void sendUserNamesList(List<String> userNames, OutputStream output) throws ParserConfigurationException,
+	public static void sendUserNamesList(List<String> userNames, DataOutputStream output) throws ParserConfigurationException,
 			TransformerConfigurationException, TransformerException, SAXException, IOException {
 		
 		Schema schema = getSchema();
@@ -130,10 +117,12 @@ public class Operations {
 		
 		DOMSource source = validate(document, schema);
 		
-		transform(source, output);
+		String send = DOMtoString(source);
+		output.writeUTF(send);
+		output.flush();
 	}
 	
-	public static void sendAuthorize(String userName, OutputStream output) throws ParserConfigurationException, SAXException, IOException, 
+	public static void sendAuthorize(String userName, DataOutputStream output) throws ParserConfigurationException, SAXException, IOException, 
 			TransformerConfigurationException, TransformerException {
 			
 		Schema schema = getSchema();
@@ -150,10 +139,9 @@ public class Operations {
 		
 		DOMSource source = validate(document, schema);
 		
-		DataOutputStream dos = new DataOutputStream(output);
 		String send = DOMtoString(source);
-		dos.writeUTF(send);
-		dos.flush();
+		output.writeUTF(send);
+		output.flush();
 	}
 	
 	public static String receiveAuthorize(DataInputStream input) throws SAXException, IOException, ParserConfigurationException {
@@ -170,7 +158,7 @@ public class Operations {
 		return user.getFirstChild().getNodeValue();
 	}
 	
-	public static void sendAnswer(String answer, OutputStream output) throws ParserConfigurationException, SAXException, IOException,
+	public static void sendAnswer(String answer, DataOutputStream output) throws ParserConfigurationException, SAXException, IOException,
 		TransformerConfigurationException, TransformerException {
 	
 		Schema schema = getSchema();
@@ -187,22 +175,26 @@ public class Operations {
 		
 		DOMSource source = validate(document, schema);
 		
-		transform(source, output);
+		String send = DOMtoString(source);
+		output.writeUTF(send);
+		output.flush();
 	}
 	
-	public static void receiveAnswer(String answer, InputStream input) throws SAXException, IOException, ParserConfigurationException {
+	public static String receiveAnswer(DataInputStream input) throws SAXException, IOException, ParserConfigurationException {
+		String receive = input.readUTF();
+	
 		Schema schema = getSchema();
 		
-		Document document = getDocumentBuilder(schema).parse(input);
+		Document document = getDocumentBuilder(schema).parse(new InputSource(new StringReader(receive)));
 		
 		Element root = document.getDocumentElement();
 		Element answerElement = (Element) root.getFirstChild();
 		Element code = (Element) answerElement.getFirstChild();
 		
-		answer = code.getFirstChild().getNodeValue();
+		return code.getFirstChild().getNodeValue();
 	}
 	
-	public static void sendHistory(List<String> messages, OutputStream output) throws SAXException, IOException, ParserConfigurationException,
+	public static void sendHistory(List<String> messages, DataOutputStream output) throws SAXException, IOException, ParserConfigurationException,
 		TransformerConfigurationException, TransformerException {
 		
 		Schema schema = getSchema();
@@ -221,13 +213,17 @@ public class Operations {
 		
 		DOMSource source = validate(document, schema);
 		
-		transform(source, output);
+		String send = DOMtoString(source);
+		output.writeUTF(send);
+		output.flush();
 	}
 	
-	public static void receiveHistory(List<String> messages, InputStream input) throws SAXException, IOException, ParserConfigurationException {
+	public static void receiveHistory(List<String> messages, DataInputStream input) throws SAXException, IOException, ParserConfigurationException {
+		String receive = input.readUTF();
+	
 		Schema schema = getSchema();
 		
-		Document document = getDocumentBuilder(schema).parse(input);
+		Document document = getDocumentBuilder(schema).parse(new InputSource(new StringReader(receive)));
 		
 		Element root = document.getDocumentElement();
 		Element history = (Element) root.getFirstChild();
@@ -237,7 +233,7 @@ public class Operations {
 		}
 	}
 	
-	public static void sendConnectUser(String name, OutputStream output) throws SAXException, IOException, ParserConfigurationException,
+	public static void sendConnectUser(String name, DataOutputStream output) throws SAXException, IOException, ParserConfigurationException,
 		TransformerConfigurationException, TransformerException {
 		
 		Schema schema = getSchema();
@@ -254,18 +250,22 @@ public class Operations {
 		
 		DOMSource source = validate(document, schema);
 		
-		transform(source, output);
+		String send = DOMtoString(source);
+		output.writeUTF(send);
+		output.flush();
 	}
 	
-	public static void receiveConnectUser(String name, InputStream input) throws SAXException, IOException, ParserConfigurationException {
+	public static String receiveConnectUser(DataInputStream input) throws SAXException, IOException, ParserConfigurationException {
+		String receive = input.readUTF();
+	
 		Schema schema = getSchema();
 		
-		Document document = getDocumentBuilder(schema).parse(input);
+		Document document = getDocumentBuilder(schema).parse(new InputSource(new StringReader(receive)));
 		
 		Element root = document.getDocumentElement();
 		Element connectUser = (Element) root.getFirstChild();
 		Element nameElement = (Element) connectUser.getFirstChild();
-		name = nameElement.getFirstChild().getNodeValue();
+		return nameElement.getFirstChild().getNodeValue();
 	}
 	
 	private static DocumentBuilder getDocumentBuilder(Schema schema) throws ParserConfigurationException {
@@ -292,5 +292,23 @@ public class Operations {
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();	
 		Transformer transformer = transformerFactory.newTransformer();
 		transformer.transform(source, new StreamResult(output));
+	}
+	
+	private static String DOMtoString(DOMSource source) {
+		try
+        {
+           StringWriter writer = new StringWriter();
+           StreamResult result = new StreamResult(writer);
+           TransformerFactory tf = TransformerFactory.newInstance();
+           Transformer transformer = tf.newTransformer();
+           transformer.transform(source, result);
+           writer.flush();
+           return writer.toString();
+        }
+        catch(TransformerException ex)
+        {
+           ex.printStackTrace();
+           return null;
+        }
 	}
 }

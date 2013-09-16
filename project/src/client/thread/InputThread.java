@@ -16,12 +16,12 @@ import util.xml.*;
 public class InputThread extends Observable implements Runnable {
 	
 	private Socket socket;
-	private InputStream input;
+	private DataInputStream input;
 	
 	public InputThread(Socket s) throws IOException {
 		socket = s;
 		
-		input = socket.getInputStream();
+		input = new DataInputStream(socket.getInputStream());
 	}
 	
 	public void run() {
@@ -40,9 +40,7 @@ public class InputThread extends Observable implements Runnable {
 	
 	public void receive() throws IOException, ParserConfigurationException, SAXException, ParseException {
 		while (true) {
-			Message message = null;
-			
-			Operations.receiveMessage(message, input);
+			Message message = Operations.receiveMessage(input);
 			
 			setChanged();
 			notifyObservers(message);

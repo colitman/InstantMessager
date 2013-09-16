@@ -20,12 +20,12 @@ public class OutputThread implements Runnable {
 
 	private Socket socket;
 	private BufferedReader input;
-	private OutputStream output;
+	private DataOutputStream output;
 	
 	public OutputThread(Socket s, BufferedReader input) throws IOException {
 		socket = s;
 		
-		output = socket.getOutputStream();
+		output = new DataOutputStream(socket.getOutputStream());
 		
 		this.input = input;
 	}

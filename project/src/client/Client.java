@@ -26,13 +26,13 @@ public class Client implements ClientInterface {
 			
 			String name = JOptionPane.showInputDialog("Enter name");
 			Operations.sendAuthorize(name, out);
-			String answer = null;
-			Operations.receiveAnswer(answer, in);
+			String answer = Operations.receiveAnswer(in);
+			
 			
 			while (!answer.contains("accept")) {
 				name = JOptionPane.showInputDialog("Please enter another name");
 				Operations.sendAuthorize(name, out);
-				Operations.receiveAnswer(answer, in);
+				answer = Operations.receiveAnswer(in);
 			}
 			
 			writer = new PipedWriter();

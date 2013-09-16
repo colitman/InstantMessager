@@ -75,10 +75,10 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 	
 	public void receive() throws IOException {
 		
-		Message message = new Message();
+		Message message = null;
 		
 		try {
-			Operations.receiveMessage(message, in);
+			message = Operations.receiveMessage(in);
 			logger.info("New message received.");
 		} catch (SAXException se) {
 			logger.error("Unable to read XML Schema", se);
