@@ -15,13 +15,10 @@ import org.xml.sax.*;
 
 public class ListenUsersThread extends Observable implements Runnable {
 	
-	private Socket socket;
 	private DataInputStream input;
 	
-	public ListenUsersThread(Socket socket) throws IOException {
-		this.socket = socket;
-		
-		input = new DataInputStream(socket.getInputStream());
+	public ListenUsersThread(DataInputStream in) throws IOException {
+		input = in;
 	}
 	
 	@Override

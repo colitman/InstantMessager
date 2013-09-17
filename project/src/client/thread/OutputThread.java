@@ -18,16 +18,12 @@ import util.xml.*;
 
 public class OutputThread implements Runnable {
 
-	private Socket socket;
 	private BufferedReader input;
 	private DataOutputStream output;
 	
-	public OutputThread(Socket s, BufferedReader input) throws IOException {
-		socket = s;
-		
-		output = new DataOutputStream(socket.getOutputStream());
-		
-		this.input = input;
+	public OutputThread(DataOutputStream out, BufferedReader in) throws IOException {
+		output = out;		
+		input = in;
 	}
 	
 	public void run() {

@@ -15,13 +15,10 @@ import util.xml.*;
 
 public class InputThread extends Observable implements Runnable {
 	
-	private Socket socket;
 	private DataInputStream input;
 	
-	public InputThread(Socket s) throws IOException {
-		socket = s;
-		
-		input = new DataInputStream(socket.getInputStream());
+	public InputThread(DataInputStream in) throws IOException {
+		input = in;
 	}
 	
 	public void run() {

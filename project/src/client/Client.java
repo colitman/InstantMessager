@@ -44,15 +44,15 @@ public class Client implements ClientInterface {
 			ClientGUI gui = new ClientGUI(bufWriter);			
 			SwingUtilities.invokeLater(gui);
 			
-			OutputThread output = new OutputThread(socket, bufReader);
+			OutputThread output = new OutputThread(out, bufReader);
 			Thread outputThread = new Thread(output);
 			outputThread.start();
 			
-			InputThread input = new InputThread(socket);
+			InputThread input = new InputThread(in);
 			Thread inputThread = new Thread(input);
 			inputThread.start();
 			
-			ListenUsersThread listenUsers = new ListenUsersThread(socket);
+			ListenUsersThread listenUsers = new ListenUsersThread(in);
 			Thread listenThread = new Thread(listenUsers);
 			listenThread.start();
 			
