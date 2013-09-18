@@ -28,12 +28,11 @@ public class Client implements ClientInterface {
 			Operations.sendAuthorize(name, out);
 			String answer = Operations.receiveAnswer(in);
 			
-			
-			while (!answer.contains("accept")) {
-				name = JOptionPane.showInputDialog("Please enter another name");
-				Operations.sendAuthorize(name, out);
-				answer = Operations.receiveAnswer(in);
-			}
+			//while (!answer.contains("accept")) {
+			//	name = JOptionPane.showInputDialog("Please enter another name");
+			//	Operations.sendAuthorize(name, out);
+			//	answer = Operations.receiveAnswer(in);
+			//}
 			
 			writer = new PipedWriter();
 			reader = new PipedReader(writer);
@@ -52,9 +51,9 @@ public class Client implements ClientInterface {
 			Thread inputThread = new Thread(input);
 			inputThread.start();
 			
-			ListenUsersThread listenUsers = new ListenUsersThread(in);
-			Thread listenThread = new Thread(listenUsers);
-			listenThread.start();
+			//ListenUsersThread listenUsers = new ListenUsersThread(in);
+			//Thread listenThread = new Thread(listenUsers);
+			//listenThread.start();
 			
 			input.addObserver(gui);
 			listenUsers.addObserver(gui);
