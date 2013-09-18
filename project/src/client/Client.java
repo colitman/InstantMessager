@@ -56,7 +56,7 @@ public class Client implements ClientInterface {
 			//listenThread.start();
 			
 			input.addObserver(gui);
-			listenUsers.addObserver(gui);
+			//listenUsers.addObserver(gui);
 		
 		} catch (Exception e) {
 			System.out.println("Error: Unknown host");
