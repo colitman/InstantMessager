@@ -3,20 +3,16 @@ package util.xml.message;
 /**
  * Contains a scecifical message that received/sended by xml
  */
-public abstract class Message<T> {
+public abstract class Message {
 	
-	private T storage;
+	private Object storage;
 	private String type;
 	
 	public void setValue(Object value) {
-		if (value instanceof T.getClass()) {
-			storage = (T) value;
-		} else {
-			throw new IllegalArgumentException();
-		}
+		storage = value;
 	}
 	
-	public T getValue() {
+	public Object getValue() {
 		return storage;
 	}
 	
