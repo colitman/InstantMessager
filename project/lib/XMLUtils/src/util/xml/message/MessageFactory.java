@@ -9,7 +9,7 @@ public class MessageFactory {
 	
 	private static MessageFactory instance = new MessageFactory();
 	
-	private MessageFactory() {};
+	private MessageFactory() {}
 	
 	public static MessageFactory getInstance() {
 		return instance;
@@ -17,9 +17,11 @@ public class MessageFactory {
 	
 	public Message newMessage(String messageType) {
 		for (int i = 0; i < supportedMessages.length; i++) {
-			Message mess = new Message() {};
-			mess.setType(messageType);
-			return mess;
+			if (messageType.equals(supportedMessages[i])) {
+				Message mess = new Message() {};
+				mess.setType(messageType);
+				return mess;
+			}
 		}
 		return null;
 	}

@@ -18,7 +18,7 @@ public abstract class Message {
 	
 	public void setType(String t) {
 		type = t; 
-	};
+	}
 	
 	public String getType() {
 		return type;
