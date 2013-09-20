@@ -5,16 +5,17 @@ import java.io.*;
 import java.util.*;
 import server.com.netcracker.romenskiy.*;
 import util.xml.*;
+import util.xml.message.*;
 
 public class Messages extends Observable {
 
-	private List<Message> list;
+	private List<MessageType> list;
 
 	public Messages() {
-		list = new ArrayList<Message>();
+		list = new ArrayList<MessageType>();
 	}
 	
-	public void add(Message message) {
+	public void add(MessageType message) {
 		list.add(message);
 		setChanged();
 		notifyObservers(message);
@@ -24,16 +25,16 @@ public class Messages extends Observable {
 		return list.size();
 	}
 	
-	public Message getLast() {
+	public MessageType getLast() {
 		return list.get(list.size()-1);
 	}
 	
-	public List<Message> getLastFiveWith(String userName) {
+	public List<MessageType> getLastFiveWith(String userName) {
 	
-		List<Message> lastFive = new ArrayList<Message>();
-		List<Message> temp = new ArrayList<Message>();
+		List<MessageType> lastFive = new ArrayList<MessageType>();
+		List<MessageType> temp = new ArrayList<MessageType>();
 		
-		for(Message m:list) {
+		for(MessageType m:list) {
 			if(m.getToUser().equals(userName) || m.getFromUser().equals(userName)) {
 				temp.add(m);
 			}

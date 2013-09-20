@@ -8,6 +8,7 @@ import org.apache.log4j.*;
 import server.com.netcracker.romenskiy.messages.*;
 
 import util.xml.*;
+import util.xml.message.*;
 
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
@@ -78,7 +79,7 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		Message message = null;
 		
 		try {
-			message = Operations.receiveMessage(in);
+			message = Operations.receive(in);
 			logger.info("New message received.");
 		} catch (SAXException se) {
 			logger.error("Unable to read XML Schema", se);
@@ -87,12 +88,12 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		} catch (ParseException pe) {
 			logger.error("ParseException", pe);
 		}
-		
-		String receiver = message.getToUser();
-		history.get(receiver).add(message);
+		MessageType messageType = (MessageType)message.getValue();
+		String receiver = messageType.getToUser();
+		history.get(receiver).add(messageType);
 	}
 	
-	public void send(Message message) throws IOException {
+	public void send(MessageType message) throws IOException {
 		try {
 			Operations.sendMessage(message, out);
 		} catch (SAXException se) {
@@ -115,7 +116,8 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 	private void prepareClient() {
 		try {
 			logger.info("Waiting for client's name");
-			setClientName(Operations.receiveAuthorize(in));
+			Message mes = Operations.receive(in);
+			setClientName((String)mes.getValue());
 			logger.info("Username received");
 			
 			users.add(this);
@@ -146,6 +148,8 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 			logger.error("TransformerConfigurationException", tce);
 		} catch (TransformerException te) {
 			logger.error("TransformerException", te);
+		} catch (ParseException pe) {
+			logger.error("ParseException", pe);
 		}
 	}
 	
@@ -159,7 +163,7 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 	
 	public void update(Observable messages, Object message) {
 		try {
-			send((Message)message);
+			send((MessageType)message);
 		} catch (IOException io) {
 			if (out != null) {
 				try {

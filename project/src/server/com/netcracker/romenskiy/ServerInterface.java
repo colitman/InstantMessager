@@ -5,6 +5,7 @@
 package server.com.netcracker.romenskiy;
 
 import util.xml.*;
+import util.xml.message.*;
 
 public interface ServerInterface {
 
@@ -16,5 +17,5 @@ public interface ServerInterface {
 	/**
 	*Sends messages to client
 	*/
-	public void send(Message message) throws Exception;
+	public void send(MessageType message) throws Exception;
 }
