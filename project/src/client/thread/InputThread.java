@@ -37,7 +37,7 @@ public class InputThread extends Observable implements Runnable {
 	
 	public void receive() throws IOException, ParserConfigurationException, SAXException, ParseException {
 		while (true) {
-			Message message = Operations.receiveMessage(input);
+			Message message = Operations.receive(input);
 			
 			setChanged();
 			notifyObservers(message);

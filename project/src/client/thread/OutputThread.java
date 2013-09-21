@@ -51,7 +51,9 @@ public class OutputThread implements Runnable {
 			String text = input.readLine();
 			Date time = new Date();
 			
-			Message message = new Message(time, from, to, text);
+			MessageType message = new MessageType(time, from, to, text);
+			Message mess = MessageFactory.getInstance().newMessage("SimpleMessage");
+			mess.setValue(message);
 			
 			Operations.sendMessage(message, output);
 		}

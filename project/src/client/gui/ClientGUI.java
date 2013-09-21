@@ -12,12 +12,19 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 
 import util.xml.*;
+import util.xml.message.*;
 
 import client.thread.*;
 
 public class ClientGUI extends JFrame implements Observer, Runnable {
 	
 	private static final long serialVersionUID = 4229L;
+	private static final String SIMPLE = "SimpleMessage";
+	private static final String AUTH = "AuthorizeMessage";
+	private static final String USERS = "UserListMessage";
+	private static final String ANSWER = "AnswerMessage";
+	private static final String HISTORY = "HistoryMessage";
+	private static final String CONNECT = "ConnectUserMessage";
 	
 	private JTextField input;
 	private JTextField userName;
@@ -36,10 +43,11 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		this.output = output;
 	}
 	
-	public void update(Observable source, Object message) {
-		if (source instanceof InputThread) {
-			if (message instanceof Message) {
-				Message receivedMessage = (Message) message;
+	public void update(Observable source, Object object) {
+		Message message = (Message) object;
+		switch (message.getType()) {
+			case SIMPLE:
+				MessageType receivedMessage = (MessageType) message.getValue();
 				
 				Date time = receivedMessage.getTime();
 				
@@ -50,31 +58,28 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				if (!text.isEmpty()) {
 					messages.setText(messages.getText() + DateFormat.getDateInstance().format(time) + " : " + text + "\n");
 				}
-			} else {
-				throw new IllegalArgumentException();
-			}
-		}
-		if (source instanceof ListenUsersThread) {
-			if (message instanceof List) {
-				List<?> list = (List<?>) message;
+				break;
+			case USERS:
+				List<String> list = (List<String>) message.getValue();
 				
 				usersModel.clear();				
 					
-				for (int i = 0; i < list.size(); i++) {
+				for (int i = 0; i < list.length; i++) {
 					usersModel.addElement((String) list.get(i));
 				}
 				
 				usersModel.removeElement(userName.getText());
+				break;
+			case HISTORY:
+				List<String> list = (List<String>) message.getValue();
 				
-			} else {
-				throw new IllegalArgumentException();
-			}
+				messages.clear();
+				for (String str : list) {
+					messages.append(str + "\n");
+				}
+				break;
+			
 		}
-		// if (source instanceof HistoryThread) {
-			// if (message instanceof Map) {
-				// Map<> map = (Map<>) message;
-			// }
-		// }
 	}
 	
 	@Override
@@ -115,8 +120,8 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 			public void valueChanged(ListSelectionEvent event) {
 				String name = users.getSelectedValue();
 				
-				//XMLUtils.connectUser(String userName, scoket.getOutputStream());
-				//XMLUtils.receiveHistory(Map history, socket.getInputStream());
+				//Operation.sendConnectUser(String userName, scoket.getOutputStream());
+				//Operation.receive(socket.getInputStream());
 			}
 		};
 		

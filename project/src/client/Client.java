@@ -6,6 +6,7 @@ import java.io.*;
 import javax.swing.*;
 
 import util.xml.*;
+import util.xml.message.*;
 
 import client.gui.*;
 import client.thread.*;
@@ -26,7 +27,6 @@ public class Client implements ClientInterface {
 			
 			String name = JOptionPane.showInputDialog("Enter name");
 			Operations.sendAuthorize(name, out);
-			String answer = Operations.receiveAnswer(in);
 			
 			//while (!answer.contains("accept")) {
 			//	name = JOptionPane.showInputDialog("Please enter another name");
