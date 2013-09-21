@@ -15,6 +15,7 @@ import org.w3c.dom.*;
 import org.xml.sax.*;
 
 import util.xml.*;
+import util.xml.message.*;
 
 public class OutputThread implements Runnable {
 

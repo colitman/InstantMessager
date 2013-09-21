@@ -60,21 +60,21 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				}
 				break;
 			case USERS:
-				List<String> list = (List<String>) message.getValue();
+				List<String> users = (List<String>) message.getValue();
 				
 				usersModel.clear();				
 					
-				for (int i = 0; i < list.length; i++) {
-					usersModel.addElement((String) list.get(i));
+				for (int i = 0; i < users.size(); i++) {
+					usersModel.addElement(users.get(i));
 				}
 				
 				usersModel.removeElement(userName.getText());
 				break;
 			case HISTORY:
-				List<String> list = (List<String>) message.getValue();
+				List<String> history = (List<String>) message.getValue();
 				
-				messages.clear();
-				for (String str : list) {
+				messages.removeAll();
+				for (String str : history) {
 					messages.append(str + "\n");
 				}
 				break;

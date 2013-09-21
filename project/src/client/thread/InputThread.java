@@ -12,6 +12,7 @@ import org.w3c.dom.*;
 import org.xml.sax.*;
 
 import util.xml.*;
+import util.xml.message.*;
 
 public class InputThread extends Observable implements Runnable {
 	
