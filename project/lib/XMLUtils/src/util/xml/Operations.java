@@ -20,21 +20,22 @@ import org.xml.sax.*;
  */
 public class Operations {
 
-	private static final String SIMPLE = "SimpleMessage";
-	private static final String AUTH = "AuthorizeMessage";
-	private static final String USERS = "UserListMessage";
-	private static final String ANSWER = "AnswerMessage";
-	private static final String HISTORY = "HistoryMessage";
-	private static final String CONNECT = "ConnectUserMessage";
+	private static final String SIMPLE = "message";
+	private static final String AUTH = "authorize";
+	private static final String USERS = "userList";
+	private static final String ANSWER = "answer";
+	private static final String HISTORY = "history";
+	private static final String CONNECT = "connectUser";
 
 	public static Message receive(DataInputStream input) throws ParserConfigurationException, IOException, ParseException, SAXException {
 		
 		String receive = input.readUTF();
 		Schema schema = getSchema();
 		Document document = getDocumentBuilder(schema).parse(new InputSource(new StringReader(receive)));
-		String type = document.getDocumentElement().getFirstChild().getNodeValue();
+		Element type = (Element)document.getDocumentElement().getFirstChild();
+		String typeName = type.getTagName();
 		
-		switch(type) {
+		switch(typeName) {
 			case SIMPLE:
 				return receiveMessage(document);
 			case AUTH:
@@ -119,7 +120,7 @@ public class Operations {
 			userNames.add(userName);
 		}	
 		
-		Message message  = MessageFactory.getInstance().newMessage(USERS);
+		Message message  = MessageFactory.getInstance().newMessage("UserListMessage");
 		message.setValue(userNames);
 		return message;
 	}
@@ -179,7 +180,7 @@ public class Operations {
 		Element authorize = (Element) root.getFirstChild();
 		Element user = (Element) authorize.getFirstChild();
 		
-		Message message  = MessageFactory.getInstance().newMessage(AUTH);
+		Message message  = MessageFactory.getInstance().newMessage("AuthorizeMessage");
 		message.setValue(user.getFirstChild().getNodeValue());
 		return message;
 	}

@@ -43,6 +43,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		this.output = output;
 	}
 	
+	@SuppressWarnings( "unchecked" )
 	public void update(Observable source, Object object) {
 		Message message = (Message) object;
 		switch (message.getType()) {
@@ -68,7 +69,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 					usersModel.addElement(users.get(i));
 				}
 				
-				usersModel.removeElement(userName.getText());
+				//usersModel.removeElement(userName.getText());
 				break;
 			case HISTORY:
 				List<String> history = (List<String>) message.getValue();
