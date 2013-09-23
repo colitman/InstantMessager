@@ -128,7 +128,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				String name = users.getSelectedValue();
 				
 				try {
-					Operations.sendConnectUser(userName.getText(), socketOut);
+					Operations.sendConnectUser(name, socketOut);
 				} catch (Exception e) {
 					System.out.println("Can't connect to user");
 				}
