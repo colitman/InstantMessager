@@ -32,15 +32,21 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 	private JTextArea messages;
 	private JScrollPane scroll;
 	private JButton sendButton;
-	private PrintWriter output;
+	private PrintWriter pipedOut;
 	
 	private JList<String> users;
 	private DefaultListModel<String> usersModel;
 	
-	public ClientGUI(PrintWriter output) {
+	private DataOutputStream socketOut; 
+	
+	public ClientGUI(PrintWriter output, String name, DataOutputStream out) {
 		super("Client");
 		
-		this.output = output;
+		pipedOut = output;
+		socketOut = out;
+		
+		userName = new JTextField();
+		userName.setText(name);
 	}
 	
 	@SuppressWarnings( "unchecked" )
@@ -69,7 +75,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 					usersModel.addElement(users.get(i));
 				}
 				
-				//usersModel.removeElement(userName.getText());
+				usersModel.removeElement(userName.getText());
 				break;
 			case HISTORY:
 				List<String> history = (List<String>) message.getValue();
@@ -107,9 +113,9 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		scroll = new JScrollPane(messages);
 		
 		sendButton = new JButton("Send");
-		sendButton.addActionListener(new SendButtonListener(input, output));
+		sendButton.addActionListener(new SendButtonListener(input, pipedOut));
 		
-		input.addActionListener(new SendButtonListener(input, output));
+		input.addActionListener(new SendButtonListener(input, pipedOut));
 		
 		usersModel = new DefaultListModel<String>();
 		
@@ -121,7 +127,11 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 			public void valueChanged(ListSelectionEvent event) {
 				String name = users.getSelectedValue();
 				
-				//Operation.sendConnectUser(String userName, scoket.getOutputStream());
+				try {
+					Operations.sendConnectUser(userName.getText(), socketOut);
+				} catch (Exception e) {
+					System.out.println("Can't connect to user");
+				}
 				//Operation.receive(socket.getInputStream());
 			}
 		};

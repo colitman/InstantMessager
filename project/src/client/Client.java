@@ -40,7 +40,7 @@ public class Client implements ClientInterface {
 			PrintWriter bufWriter = new PrintWriter(new BufferedWriter(writer), true);
 			BufferedReader bufReader = new BufferedReader(reader);
 			
-			ClientGUI gui = new ClientGUI(bufWriter);			
+			ClientGUI gui = new ClientGUI(bufWriter, name, out);			
 			SwingUtilities.invokeLater(gui);
 			
 			OutputThread output = new OutputThread(out, bufReader);
