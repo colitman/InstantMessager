@@ -40,7 +40,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 	private DataOutputStream socketOut; 
 	
 	public ClientGUI(PrintWriter output, String name, DataOutputStream out) {
-		super("Client");
+		super("Client - " + name);
 		
 		pipedOut = output;
 		socketOut = out;

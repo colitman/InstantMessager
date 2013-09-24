@@ -42,6 +42,7 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		out = new DataOutputStream(s.getOutputStream());
 		
 		this.users = users;
+		users.addObserver(this);
 		
 		this.history = history;
 		
@@ -162,18 +163,34 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 	}
 	
 	public void update(Observable messages, Object message) {
-		try {
-			send((MessageType)message);
-		} catch (IOException io) {
-			if (out != null) {
-				try {
-					out.close();
-				} catch (Exception ioe) {
-					logger.error("Failed to close the output stream", ioe);
+		if(messages instanceof Users) {
+			try {
+				Operations.sendUserNamesList(users.getUserNames(), out);
+			} catch (SAXException se) {
+			logger.error("Unable to read XML Schema", se);
+			} catch (IOException io) {
+				logger.error("IO Exception", io);
+			} catch (ParserConfigurationException pce) {
+				logger.error("ParcerConfigurationException", pce);
+			} catch (TransformerConfigurationException tce) {
+				logger.error("TransformerConfigurationException", tce);
+			} catch (TransformerException te) {
+				logger.error("TransformerException", te);
+			} 
+		} else {
+			try {
+				send((MessageType)message);
+			} catch (IOException io) {
+				if (out != null) {
+					try {
+						out.close();
+					} catch (Exception ioe) {
+						logger.error("Failed to close the output stream", ioe);
+					}
 				}
+				
+				logger.error("Impossible to send messages", io);
 			}
-			
-			logger.error("Impossible to send messages", io);
 		}
 	}
 }
