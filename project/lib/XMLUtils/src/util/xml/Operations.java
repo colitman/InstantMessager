@@ -65,16 +65,16 @@ public class Operations {
 		document.appendChild(root);
 		Element messageElement = document.createElement("message");
 		root.appendChild(messageElement);
-		Element time = document.createElement("time");
-		DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+		Element time = document.createElement("date");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		time.appendChild(document.createTextNode(dateFormat.format(new Date())));
 		messageElement.appendChild(time);	
-		Element to = document.createElement("to");
-		to.appendChild(document.createTextNode(message.getToUser()));
-		messageElement.appendChild(to);
 		Element from = document.createElement("from");
 		from.appendChild(document.createTextNode(message.getFromUser()));
 		messageElement.appendChild(from);
+		Element to = document.createElement("to");
+		to.appendChild(document.createTextNode(message.getToUser()));
+		messageElement.appendChild(to);
 		Element text = document.createElement("text");
 		text.appendChild(document.createTextNode(message.getMessage()));
 		messageElement.appendChild(text);
@@ -101,8 +101,11 @@ public class Operations {
 		Element textElement = (Element) childs.item(3);
 		String text = textElement.getFirstChild().getNodeValue();
 
-		Message message  = MessageFactory.getInstance().newMessage(SIMPLE);
-		message.setValue(new MessageType(DateFormat.getDateInstance().parse(time), from, to, text));
+		Message message  = MessageFactory.getInstance().newMessage("SimpleMessage");
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		Date date1 = formatter.parse(time);
+		message.setValue(new MessageType(date1, from, to, text));
 		return message;
 	}
 	
