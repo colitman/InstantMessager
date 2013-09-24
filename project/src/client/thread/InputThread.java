@@ -18,7 +18,7 @@ public class InputThread extends Observable implements Runnable {
 	
 	private DataInputStream input;
 	
-	public InputThread(DataInputStream in) throws IOException {
+	public InputThread(DataInputStream in) {
 		input = in;
 	}
 	
@@ -27,16 +27,10 @@ public class InputThread extends Observable implements Runnable {
 			receive();
 		} catch (IOException exception) {
 			JOptionPane.showMessageDialog(null, "Problems with a server");
-		} catch (ParserConfigurationException parserException) {
-			parserException.printStackTrace();
-		} catch (SAXException saxException) {
-			saxException.printStackTrace();
-		} catch (ParseException dateException) {
-			dateException.printStackTrace();
 		}
 	}
 	
-	public void receive() throws IOException, ParserConfigurationException, SAXException, ParseException {
+	public void receive() throws IOException {
 		while (true) {
 			Message message = Operations.receive(input);
 			

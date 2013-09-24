@@ -17,5 +17,5 @@ public interface ServerInterface {
 	/**
 	*Sends messages to client
 	*/
-	public void send(MessageType message) throws Exception;
+	//public void send(MessageType message) throws Exception;
 }

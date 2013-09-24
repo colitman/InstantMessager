@@ -27,11 +27,17 @@ public class Operations {
 	private static final String HISTORY = "history";
 	private static final String CONNECT = "connectUser";
 
-	public static Message receive(DataInputStream input) throws ParserConfigurationException, IOException, ParseException, SAXException {
+	public static Message receive(DataInputStream input) throws IOException {
 		
 		String receive = input.readUTF();
 		Schema schema = getSchema();
-		Document document = getDocumentBuilder(schema).parse(new InputSource(new StringReader(receive)));
+		Document document = null;
+		try {
+			document = getDocumentBuilder(schema).parse(new InputSource(new StringReader(receive)));
+		} catch (SAXException se) {
+			se.printStackTrace();
+			return null;
+		}
 		Element type = (Element)document.getDocumentElement().getFirstChild();
 		String typeName = type.getTagName();
 		
@@ -54,8 +60,7 @@ public class Operations {
 		
 	}
 
-	public static void sendMessage(MessageType message, DataOutputStream output) throws ParserConfigurationException,
-			TransformerConfigurationException, ParseException, TransformerException, SAXException, IOException {
+	public static void sendMessage(MessageType message, DataOutputStream output) throws IOException {
 		
 		Schema schema = getSchema();
 		
@@ -86,8 +91,7 @@ public class Operations {
 		output.flush();
 	}
 	
-	public static Message receiveMessage(Document document) throws ParserConfigurationException,
-			IOException, ParseException, SAXException {
+	public static Message receiveMessage(Document document) {
 			
 		Element root = document.getDocumentElement();
 		Element messageElement = (Element) root.getFirstChild();
@@ -103,14 +107,19 @@ public class Operations {
 
 		Message message  = MessageFactory.getInstance().newMessage("SimpleMessage");
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = new Date();
-		Date date1 = formatter.parse(time);
-		message.setValue(new MessageType(date1, from, to, text));
+		Date date = null;
+		try {
+			date = formatter.parse(time);
+		} catch (ParseException pe) {
+			pe.printStackTrace();
+			date = new Date();
+		}
+		
+		message.setValue(new MessageType(date, from, to, text));
 		return message;
 	}
 	
-	public static Message receiveUserNamesList(Document document) throws ParserConfigurationException,
-			SAXException, IOException {
+	public static Message receiveUserNamesList(Document document) {
 		
 		Element root = document.getDocumentElement();		
 		Element userList = (Element) root.getFirstChild();
@@ -129,8 +138,7 @@ public class Operations {
 		return message;
 	}
 	
-	public static void sendUserNamesList(List<String> userNames, DataOutputStream output) throws ParserConfigurationException,
-			TransformerConfigurationException, TransformerException, SAXException, IOException {
+	public static void sendUserNamesList(List<String> userNames, DataOutputStream output) throws IOException {
 		
 		Schema schema = getSchema();
 		
@@ -156,8 +164,7 @@ public class Operations {
 		output.flush();
 	}
 	
-	public static void sendAuthorize(String userName, DataOutputStream output) throws ParserConfigurationException, SAXException, IOException, 
-			TransformerConfigurationException, TransformerException {
+	public static void sendAuthorize(String userName, DataOutputStream output) throws IOException {
 			
 		Schema schema = getSchema();
 		
@@ -178,7 +185,7 @@ public class Operations {
 		output.flush();
 	}
 	
-	public static Message receiveAuthorize(Document document) throws SAXException, IOException, ParserConfigurationException {
+	public static Message receiveAuthorize(Document document) {
 				
 		Element root = document.getDocumentElement();
 		Element authorize = (Element) root.getFirstChild();
@@ -189,8 +196,7 @@ public class Operations {
 		return message;
 	}
 	
-	public static void sendAnswer(String answer, DataOutputStream output) throws ParserConfigurationException, SAXException, IOException,
-		TransformerConfigurationException, TransformerException {
+	public static void sendAnswer(String answer, DataOutputStream output) throws IOException {
 	
 		Schema schema = getSchema();
 		
@@ -211,19 +217,18 @@ public class Operations {
 		output.flush();
 	}
 	
-	public static Message receiveAnswer(Document document) throws SAXException, IOException, ParserConfigurationException {
+	public static Message receiveAnswer(Document document) {
 		
 		Element root = document.getDocumentElement();
 		Element answerElement = (Element) root.getFirstChild();
 		Element code = (Element) answerElement.getFirstChild();
 		
-		Message message  = MessageFactory.getInstance().newMessage(ANSWER);
+		Message message  = MessageFactory.getInstance().newMessage("AnswerMessage");
 		message.setValue(code.getFirstChild().getNodeValue());
 		return message;
 	}
 	
-	public static void sendHistory(List<String> messages, DataOutputStream output) throws SAXException, IOException, ParserConfigurationException,
-		TransformerConfigurationException, TransformerException {
+	public static void sendHistory(List<String> messages, DataOutputStream output) throws IOException {
 		
 		Schema schema = getSchema();
 		
@@ -246,7 +251,7 @@ public class Operations {
 		output.flush();
 	}
 	
-	public static Message receiveHistory(Document document) throws SAXException, IOException, ParserConfigurationException {
+	public static Message receiveHistory(Document document) {
 		
 		Element root = document.getDocumentElement();
 		Element history = (Element) root.getFirstChild();
@@ -255,13 +260,12 @@ public class Operations {
 			messages.add(message.getFirstChild().getNodeValue());
 		}
 		
-		Message message  = MessageFactory.getInstance().newMessage(HISTORY);
+		Message message  = MessageFactory.getInstance().newMessage("HistoryMessage");
 		message.setValue(messages);
 		return message;
 	}
 	
-	public static void sendConnectUser(String name, DataOutputStream output) throws SAXException, IOException, ParserConfigurationException,
-		TransformerConfigurationException, TransformerException {
+	public static void sendConnectUser(String name, DataOutputStream output) throws IOException {
 		
 		Schema schema = getSchema();
 		
@@ -282,41 +286,53 @@ public class Operations {
 		output.flush();
 	}
 	
-	public static Message receiveConnectUser(Document document) throws SAXException, IOException, ParserConfigurationException {
+	public static Message receiveConnectUser(Document document) {
 		
 		Element root = document.getDocumentElement();
 		Element connectUser = (Element) root.getFirstChild();
 		Element nameElement = (Element) connectUser.getFirstChild();
 		
-		Message message  = MessageFactory.getInstance().newMessage(CONNECT);
+		Message message  = MessageFactory.getInstance().newMessage("ConnectUserMessage");
 		message.setValue(nameElement.getFirstChild().getNodeValue());
 		return message;
 	}
 	
-	private static DocumentBuilder getDocumentBuilder(Schema schema) throws ParserConfigurationException {
-		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-		builderFactory.setSchema(schema);
-		DocumentBuilder builder = builderFactory.newDocumentBuilder();
-		return builder;
+	private static DocumentBuilder getDocumentBuilder(Schema schema) {
+		try {
+			DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+			builderFactory.setSchema(schema);
+			DocumentBuilder builder = builderFactory.newDocumentBuilder();
+			return builder;
+		} catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+			return null;
+		}
 	}
 	
-	private static Schema getSchema() throws SAXException {
-		SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
-		Schema schema = schemaFactory.newSchema(new File("res/document.xsd"));
-		return schema;
+	private static Schema getSchema() {
+		try {
+			SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+			Schema schema = schemaFactory.newSchema(new File("res/document.xsd"));
+			return schema;
+		} catch (SAXException se) {
+			se.printStackTrace();
+			return null;
+		}
 	}
 	
-	private static DOMSource validate(Document document, Schema schema) throws SAXException, IOException {
-		DOMSource source = new DOMSource(document);
-		Validator validator = schema.newValidator();
-		validator.validate(source);
-		return source;
-	}
-	
-	private static void transform(DOMSource source, OutputStream output) throws TransformerConfigurationException, TransformerException {
-		TransformerFactory transformerFactory = TransformerFactory.newInstance();	
-		Transformer transformer = transformerFactory.newTransformer();
-		transformer.transform(source, new StreamResult(output));
+	private static DOMSource validate(Document document, Schema schema) {
+		DOMSource source = null;
+		try{
+			source = new DOMSource(document);
+			Validator validator = schema.newValidator();
+			validator.validate(source);
+			return source;
+		} catch (SAXException se) {
+			se.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+		return null;
 	}
 	
 	private static String DOMtoString(DOMSource source) {
@@ -329,9 +345,7 @@ public class Operations {
            transformer.transform(source, result);
            writer.flush();
            return writer.toString();
-        }
-        catch(TransformerException ex)
-        {
+        } catch(TransformerException ex) {
            ex.printStackTrace();
            return null;
         }

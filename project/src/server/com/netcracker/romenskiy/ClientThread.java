@@ -28,6 +28,7 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 	private History history;
 	private String userName = "guest";
 	private Messages messages = null;
+	private boolean disabled = false;
 	
 	public ClientThread(Socket socket, History history, Users users) throws IOException {
 		
@@ -47,21 +48,19 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		this.history = history;
 		
 		start();
-		logger.warn("Connection established with [" + this + "]");
+		logger.warn("Connection with new user is established.");
 	}
 	
 	public void run() {
-		
-		prepareClient();
-
-		logger.info("Starting normal session.");
-		
 		try {
+			prepareClient();
+			logger.info("Starting normal session with " + getClientName());
 			while(true) {
 				this.receive();
 			}
 		} catch (IOException ioe) {
 			logger.warn("Client " + this + " has been disconnected.");
+			this.setDisabled(true);
 			users.remove(this);
 		} finally {
 			try {
@@ -76,110 +75,52 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 	}
 	
 	public void receive() throws IOException {
+		Message message = Operations.receive(in);
+		logger.info("New message received.");
 		
-		Message message = null;
+		processMessage(message);		
+	}
+	
+	private void processMessage(Message message) throws IOException {
+		if(message.getType().equals("SimpleMessage")) {
+			MessageType messageType = (MessageType)message.getValue();
+			String receiver = messageType.getToUser();
+			history.get(receiver).add(messageType);
+		}
 		
-		try {
-			message = Operations.receive(in);
-			logger.info("New message received.");
-		} catch (SAXException se) {
-			logger.error("Unable to read XML Schema", se);
-		} catch (ParserConfigurationException pce) {
-			logger.error("ParcerConfigurationException", pce);
-		} catch (ParseException pe) {
-			logger.error("ParseException", pe);
-		}
-		MessageType messageType = (MessageType)message.getValue();
-		String receiver = messageType.getToUser();
-		history.get(receiver).add(messageType);
-	}
-	
-	public void send(MessageType message) throws IOException {
-		try {
-			Operations.sendMessage(message, out);
-		} catch (SAXException se) {
-			logger.error("Unable to read XML Schema", se);
-		} catch (ParserConfigurationException pce) {
-			logger.error("ParcerConfigurationException", pce);
-		} catch (TransformerConfigurationException tce) {
-			logger.error("TransformerConfigurationException", tce);
-		} catch (TransformerException te) {
-			logger.error("TransformerException", te);
-		} catch (ParseException pe) {
-			logger.error("ParseException", pe);
+		if (message.getType().equals("ConnectUserMessage")) {
+			String user = (String)message.getValue();
+			Messages messages = history.get(user);
+			Operations.sendHistory(messages.getLastFiveWith(user), out);
 		}
 	}
 	
-	private void setClientName(String userName) {
-		this.userName = userName;
-	}
-	
-	private void prepareClient() {
-		try {
-			logger.info("Waiting for client's name");
-			Message mes = Operations.receive(in);
-			setClientName((String)mes.getValue());
-			logger.info("Username received");
-			
-			users.add(this);
-			logger.info("User has been added to the userlist.");
-			
-			messages = new Messages();
-			messages.addObserver(this);
-			logger.info("Message list created");
-			
-			if(!history.containsKey(userName)) {
-				history.put(userName, messages);
-			} else {
-				messages = history.get(userName);
-			}
-			logger.info("Message list assigned to history");
-			
-			logger.info("Sending the list of users.");
-			Operations.sendUserNamesList(users.getUserNames(), out);
-			logger.info("Userlist has been sent");
-			
-		} catch (SAXException se) {
-			logger.error("Unable to read XML Schema", se);
-		} catch (IOException io) {
-			logger.error("IO Exception", io);
-		} catch (ParserConfigurationException pce) {
-			logger.error("ParcerConfigurationException", pce);
-		} catch (TransformerConfigurationException tce) {
-			logger.error("TransformerConfigurationException", tce);
-		} catch (TransformerException te) {
-			logger.error("TransformerException", te);
-		} catch (ParseException pe) {
-			logger.error("ParseException", pe);
-		}
-	}
+	// public void send(MessageType message) throws IOException {
+			//Operations.sendMessage(message, out);
+	// }
 	
 	public String toString() {
-		return getClientName() + "[" + s.getInetAddress() + "]";
+		return getClientName() + " [" + s.getInetAddress() + "]";
 	}
 	
 	public String getClientName() {
 		return userName;
 	}
 	
-	public void update(Observable messages, Object message) {
-		if(messages instanceof Users) {
+	public void update(Observable source, Object object) {
+		if(source instanceof Users) {
+			if(!this.isDisabled()) {
+				try {
+					Operations.sendUserNamesList(users.getUserNames(), out);
+				} catch (IOException io) {
+					logger.error("IO Exception", io);
+				}
+			}
+		} 
+		
+		if (source instanceof Messages) {
 			try {
-				Operations.sendUserNamesList(users.getUserNames(), out);
-			} catch (SAXException se) {
-			logger.error("Unable to read XML Schema", se);
-			} catch (IOException io) {
-				logger.error("IO Exception", io);
-			} catch (ParserConfigurationException pce) {
-				logger.error("ParcerConfigurationException", pce);
-			} catch (TransformerConfigurationException tce) {
-				logger.error("TransformerConfigurationException", tce);
-			} catch (TransformerException te) {
-				logger.error("TransformerException", te);
-			} 
-		} else {
-			try {
-				send((MessageType)message);
+				Operations.sendMessage((MessageType)object, out);
 			} catch (IOException io) {
 				if (out != null) {
 					try {
@@ -192,5 +133,42 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 				logger.error("Impossible to send messages", io);
 			}
 		}
+	}
+	
+	private void setDisabled(boolean state) {
+		this.disabled = state;
+	}
+	
+	private boolean isDisabled() {
+		return this.disabled;
+	}
+	
+	private void setClientName(String userName) {
+		this.userName = userName;
+	}
+	
+	private void prepareClient() throws IOException {
+		logger.info("Waiting for client's name");
+		Message mes = Operations.receive(in);
+		setClientName((String)mes.getValue());
+		logger.info("Username for " + s.getInetAddress() + " received: " + userName);
+		
+		users.add(this);
+		logger.info("User " + getClientName() + " has been added to the userlist.");
+		
+		messages = new Messages();
+		messages.addObserver(this);
+		logger.info("Message list created");
+		
+		if(!history.containsKey(userName)) {
+			history.put(userName, messages);
+		} else {
+			messages = history.get(userName);
+		}
+		logger.info("Message list assigned to history");
+		
+		logger.info("Sending the list of users.");
+		Operations.sendUserNamesList(users.getUserNames(), out);
+		logger.info("Userlist has been sent");
 	}
 }

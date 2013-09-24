@@ -22,7 +22,7 @@ public class OutputThread implements Runnable {
 	private BufferedReader input;
 	private DataOutputStream output;
 	
-	public OutputThread(DataOutputStream out, BufferedReader in) throws IOException {
+	public OutputThread(DataOutputStream out, BufferedReader in) {
 		output = out;		
 		input = in;
 	}
@@ -32,20 +32,10 @@ public class OutputThread implements Runnable {
 			send();
 		} catch (IOException exception) {
 			JOptionPane.showMessageDialog(null, "Problems with a server");
-		} catch (ParserConfigurationException parserException) {
-			parserException.printStackTrace();
-		} catch (TransformerConfigurationException transformerConfException) {
-			transformerConfException.printStackTrace();
-		} catch (TransformerException transformerException) {
-			transformerException.printStackTrace();
-		} catch (ParseException parseException) {
-			parseException.printStackTrace();
-		} catch (SAXException saxException) {
-			saxException.printStackTrace();
 		}
 	}
 	
-	private void send() throws IOException, ParserConfigurationException, TransformerConfigurationException, TransformerException, ParseException, SAXException {
+	private void send() throws IOException {
 		while (true) {
 			String from = input.readLine();
 			String to = input.readLine();

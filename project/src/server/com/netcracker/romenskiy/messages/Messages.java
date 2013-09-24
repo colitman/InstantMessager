@@ -29,9 +29,9 @@ public class Messages extends Observable {
 		return list.get(list.size()-1);
 	}
 	
-	public List<MessageType> getLastFiveWith(String userName) {
+	public List<String> getLastFiveWith(String userName) {
 	
-		List<MessageType> lastFive = new ArrayList<MessageType>();
+		List<String> lastFive = new ArrayList<String>();
 		List<MessageType> temp = new ArrayList<MessageType>();
 		
 		for(MessageType m:list) {
@@ -44,8 +44,8 @@ public class Messages extends Observable {
 		if(i < 0) {
 			i = 0;
 		}
-		for (i = i; i < temp.size(); i++) {
-			lastFive.add(temp.get(i));
+		for (int j = i; j < temp.size(); j++) {
+			lastFive.add(temp.get(j).getMessage());
 		}
 		
 		return lastFive;
