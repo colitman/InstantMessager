@@ -157,7 +157,6 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		logger.info("User " + getClientName() + " has been added to the userlist.");
 		
 		messages = new Messages();
-		messages.addObserver(this);
 		logger.info("Message list created");
 		
 		if(!history.containsKey(userName)) {
@@ -165,6 +164,7 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		} else {
 			messages = history.get(userName);
 		}
+		messages.addObserver(this);
 		logger.info("Message list assigned to history");
 		
 		logger.info("Sending the list of users.");
