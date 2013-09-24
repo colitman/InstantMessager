@@ -114,8 +114,9 @@ public class Operations {
 		Element amount = (Element) userList.getFirstChild();
 		int count = Integer.valueOf(amount.getFirstChild().getNodeValue());
 		List<String> userNames = new ArrayList<String>();
-		for (int i = 1; i < count; i++) {
-			Element element = (Element) userList.getNextSibling();
+		NodeList nodeList = userList.getChildNodes();
+		for (int i = 1; i <= count; i++) {
+			Element element = (Element) nodeList.item(i);
 			String userName = element.getFirstChild().getNodeValue();
 			userNames.add(userName);
 		}	
