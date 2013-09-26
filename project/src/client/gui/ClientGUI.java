@@ -136,6 +136,8 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 			}
 		};
 		
+		users.addListSelectionListener(listSelection);
+		
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(input, BorderLayout.CENTER);
 		panel.add(sendButton, BorderLayout.EAST);
