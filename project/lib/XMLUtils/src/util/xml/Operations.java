@@ -241,7 +241,7 @@ public class Operations {
 		for (String str : messages) {
 			Element message = document.createElement("message");
 			message.appendChild(document.createTextNode(str));
-			root.appendChild(message);
+			history.appendChild(message);
 		}
 		
 		DOMSource source = validate(document, schema);
@@ -271,7 +271,7 @@ public class Operations {
 		
 		Document document = getDocumentBuilder(schema).newDocument();
 		
-		Element root = document.createElement("root");
+		Element root = document.createElement("document");
 		document.appendChild(root);
 		Element connectUser = document.createElement("connectUser");
 		root.appendChild(connectUser);
