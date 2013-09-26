@@ -63,7 +63,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				String text = receivedMessage.getMessage();
 				
 				if (!text.isEmpty()) {
-					messages.setText(messages.getText() + DateFormat.getDateInstance().format(time) + " : " + text + "\n");
+					messages.setText(messages.getText() + DateFormat.getDateInstance().format(time) + " (" + from + ") : " + text + "\n");
 				}
 				break;
 			case USERS:
@@ -106,6 +106,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 	
 	private void createFrame() {
 		input = new JTextField();
+		input.setEnabled(false);
 		
 		messages = new JTextArea();
 		messages.setEditable(false);
@@ -113,6 +114,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		scroll = new JScrollPane(messages);
 		
 		sendButton = new JButton("Send");
+		sendButton.setEnabled(false);
 		sendButton.addActionListener(new SendButtonListener(input, pipedOut));
 		
 		input.addActionListener(new SendButtonListener(input, pipedOut));
@@ -126,6 +128,8 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 			@Override
 			public void valueChanged(ListSelectionEvent event) {
 				String name = users.getSelectedValue();
+				input.setEnabled(true);
+				sendButton.setEnabled(true);
 				
 				try {
 					Operations.sendConnectUser(name, socketOut);
