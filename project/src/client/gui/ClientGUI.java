@@ -30,6 +30,8 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 	private JTextArea messages;
 	private JScrollPane scroll;
 	private JButton sendButton;
+	private JList<String> users;
+	private DefaultListModel<String> usersModel;
 	
 	private PrintWriter pipedOut;
 	private DataOutputStream socketOut; 
@@ -37,9 +39,6 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 	private String userName;
 	private String selectedName;
 	private Map<String, List<String>> history;
-	private JList<String> users;
-	private DefaultListModel<String> usersModel;
-	
 	
 	public ClientGUI(PrintWriter output, String name, DataOutputStream out) {
 		super("Client - " + name);
