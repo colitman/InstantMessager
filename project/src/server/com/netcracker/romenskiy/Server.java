@@ -17,7 +17,6 @@ public class Server {
 
 private static final Users users = new Users();
 private static final Logger logger = Logger.getLogger("im.server");
-private static final History history = new History();
 
 	public static void main(String... args) {
 		
@@ -41,7 +40,7 @@ private static final History history = new History();
 			while(true) {
 				try {
 					s = ss.accept();
-					ClientThread client = new ClientThread(s, history, users);			
+					ClientThread client = new ClientThread(s, users);			
 				} catch (IOException ioe) {
 					if(s != null) {
 						try {

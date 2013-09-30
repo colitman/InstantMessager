@@ -13,9 +13,4 @@ public interface ServerInterface {
 	*Receives messages from client
 	*/
 	public void receive() throws Exception;
-	
-	/**
-	*Sends messages to client
-	*/
-	//public void send(MessageType message) throws Exception;
 }

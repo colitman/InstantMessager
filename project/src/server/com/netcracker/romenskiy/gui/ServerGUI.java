@@ -93,9 +93,5 @@ public class ServerGUI extends JFrame implements Runnable, Observer {
 		if (source instanceof Users) {
 			usersCount.setText(new Integer(users.size()).toString());
 		}
-		
-		if (source instanceof Messages) {
-			userMessages.setText(userMessages.getText() + "\r\n" + (String)message);
-		}
 	}
 }

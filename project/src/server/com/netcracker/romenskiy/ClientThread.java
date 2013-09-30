@@ -25,14 +25,12 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 	private DataOutputStream out = null;
 	private Users users;
 	private static final Logger logger = Logger.getLogger("im.server");
-	private History history;
 	private String userName = "guest";
-	private Messages messages = null;
 	private boolean disabled = false;
 	
 	private Map<Integer, Room> rooms;
 	
-	public ClientThread(Socket socket, History history, Users users) throws IOException {
+	public ClientThread(Socket socket, Users users) throws IOException {
 		
 		logger.warn("New client is trying to connect to the chat...");
 		logger.info("Assigning a socket to a new client...");
@@ -48,8 +46,6 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		users.addObserver(this);
 		
 		this.rooms = new Hashtable<Integer, Room>();
-		
-		//this.history = history;
 		
 		start();
 		logger.warn("Connection with new user is established.");
@@ -105,23 +101,7 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 			Room room = Rooms.getRoom(this.getClientName(), user);
 			Operations.sendHistory(room.getLastFive(), out);
 		}
-	
-		// if(message.getType().equals("SimpleMessage")) {
-			// MessageType messageType = (MessageType)message.getValue();
-			// String receiver = messageType.getToUser();
-			// history.get(receiver).add(messageType);
-		// }
-		
-		// if (message.getType().equals("ConnectUserMessage")) {
-			// String user = (String)message.getValue();
-			// Messages messages = history.get(user);
-			// Operations.sendHistory(messages.getLastFiveWith(user), out);
-		// }
 	}
-	
-	// public void send(MessageType message) throws IOException {
-			//Operations.sendMessage(message, out);
-	// }
 	
 	public String toString() {
 		return getClientName() + " [" + s.getInetAddress() + "]";
@@ -156,22 +136,6 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 				logger.error("Impossible to send messages", ioe);
 			}
 		}
-		
-		// if (source instanceof Messages) {
-			// try {
-				// Operations.sendMessage((MessageType)object, out);
-			// } catch (IOException io) {
-				// if (out != null) {
-					// try {
-						// out.close();
-					// } catch (Exception ioe) {
-						// logger.error("Failed to close the output stream", ioe);
-					// }
-				// }
-				
-				// logger.error("Impossible to send messages", io);
-			// }
-		// }
 	}
 	
 	private void setDisabled(boolean state) {
@@ -194,17 +158,6 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		
 		users.add(this);
 		logger.info("User " + getClientName() + " has been added to the userlist.");
-		
-		//messages = new Messages();
-		//logger.info("Message list created");
-		
-		// if(!history.containsKey(userName)) {
-			// history.put(userName, messages);
-		// } else {
-			// messages = history.get(userName);
-		// }
-		// messages.addObserver(this);
-		// logger.info("Message list assigned to history");
 		
 		logger.info("Sending the list of users.");
 		Operations.sendUserNamesList(users.getUserNames(), out);
