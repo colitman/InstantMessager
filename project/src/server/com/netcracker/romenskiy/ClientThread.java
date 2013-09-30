@@ -30,6 +30,8 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 	private Messages messages = null;
 	private boolean disabled = false;
 	
+	private Map<Integer, Room> rooms;
+	
 	public ClientThread(Socket socket, History history, Users users) throws IOException {
 		
 		logger.warn("New client is trying to connect to the chat...");
@@ -45,7 +47,9 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		this.users = users;
 		users.addObserver(this);
 		
-		this.history = history;
+		this.rooms = new Hashtable<Integer, Room>();
+		
+		//this.history = history;
 		
 		start();
 		logger.warn("Connection with new user is established.");
@@ -82,17 +86,37 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 	}
 	
 	private void processMessage(Message message) throws IOException {
-		if(message.getType().equals("SimpleMessage")) {
+	
+		if (message.getType().equals("SimpleMessage")) {
 			MessageType messageType = (MessageType)message.getValue();
 			String receiver = messageType.getToUser();
-			history.get(receiver).add(messageType);
+			String sender = messageType.getFromUser();
+			Room room = Rooms.getRoom(sender, receiver);
+			if(!this.rooms.containsKey(room.hashCode())) {
+				this.rooms.put(room.hashCode(), room);
+				room.addObserver(this);
+				room.addObserver(users.get(receiver));
+			}
+			room.add(messageType);
 		}
 		
 		if (message.getType().equals("ConnectUserMessage")) {
 			String user = (String)message.getValue();
-			Messages messages = history.get(user);
-			Operations.sendHistory(messages.getLastFiveWith(user), out);
+			Room room = Rooms.getRoom(this.getClientName(), user);
+			Operations.sendHistory(room.getLastFive(), out);
 		}
+	
+		// if(message.getType().equals("SimpleMessage")) {
+			// MessageType messageType = (MessageType)message.getValue();
+			// String receiver = messageType.getToUser();
+			// history.get(receiver).add(messageType);
+		// }
+		
+		// if (message.getType().equals("ConnectUserMessage")) {
+			// String user = (String)message.getValue();
+			// Messages messages = history.get(user);
+			// Operations.sendHistory(messages.getLastFiveWith(user), out);
+		// }
 	}
 	
 	// public void send(MessageType message) throws IOException {
@@ -116,23 +140,38 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 					logger.error("IO Exception", io);
 				}
 			}
-		} 
+		}
 		
-		if (source instanceof Messages) {
-			try {
+		if (source instanceof Room) {
+			try{
 				Operations.sendMessage((MessageType)object, out);
-			} catch (IOException io) {
+			} catch (IOException ioe) {
 				if (out != null) {
 					try {
 						out.close();
-					} catch (Exception ioe) {
-						logger.error("Failed to close the output stream", ioe);
+					} catch (Exception e) {
+						logger.error("Failed to close the output stream", e);
 					}
 				}
-				
-				logger.error("Impossible to send messages", io);
+				logger.error("Impossible to send messages", ioe);
 			}
 		}
+		
+		// if (source instanceof Messages) {
+			// try {
+				// Operations.sendMessage((MessageType)object, out);
+			// } catch (IOException io) {
+				// if (out != null) {
+					// try {
+						// out.close();
+					// } catch (Exception ioe) {
+						// logger.error("Failed to close the output stream", ioe);
+					// }
+				// }
+				
+				// logger.error("Impossible to send messages", io);
+			// }
+		// }
 	}
 	
 	private void setDisabled(boolean state) {
@@ -156,16 +195,16 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		users.add(this);
 		logger.info("User " + getClientName() + " has been added to the userlist.");
 		
-		messages = new Messages();
-		logger.info("Message list created");
+		//messages = new Messages();
+		//logger.info("Message list created");
 		
-		if(!history.containsKey(userName)) {
-			history.put(userName, messages);
-		} else {
-			messages = history.get(userName);
-		}
-		messages.addObserver(this);
-		logger.info("Message list assigned to history");
+		// if(!history.containsKey(userName)) {
+			// history.put(userName, messages);
+		// } else {
+			// messages = history.get(userName);
+		// }
+		// messages.addObserver(this);
+		// logger.info("Message list assigned to history");
 		
 		logger.info("Sending the list of users.");
 		Operations.sendUserNamesList(users.getUserNames(), out);

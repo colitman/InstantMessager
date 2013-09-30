@@ -50,6 +50,15 @@ public class Users extends Observable {
 		return users.get(index);
 	}
 	
+	public ClientThread get(String name) {
+		for(ClientThread ct:users) {
+			if(ct.getClientName().equals(name)) {
+				return ct;
+			}
+		}
+		return null;
+	}
+	
 	/**
 	*Returns a list of usernames
 	*/
