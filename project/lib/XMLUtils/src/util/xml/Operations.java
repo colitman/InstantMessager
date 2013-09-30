@@ -256,8 +256,9 @@ public class Operations {
 		Element root = document.getDocumentElement();
 		Element history = (Element) root.getFirstChild();
 		List<String> messages = new ArrayList<String>();
-		for (Element message = (Element) history.getFirstChild(); message != null; message = (Element) history.getNextSibling()) {
-			messages.add(message.getFirstChild().getNodeValue());
+		NodeList nodeList = history.getChildNodes();
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			messages.add(nodeList.item(i).getFirstChild().getNodeValue());
 		}
 		
 		Message message  = MessageFactory.getInstance().newMessage("HistoryMessage");

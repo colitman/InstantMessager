@@ -34,7 +34,7 @@ public class Room extends Observable {
 		if (i < 0)
 			i = 0;
 		for(int j = i; j < messages.size(); j++) {
-			returned.add(messages.get(i).getMessage());
+			returned.add(messages.get(j).getMessage());
 		}
 		
 		return returned;
