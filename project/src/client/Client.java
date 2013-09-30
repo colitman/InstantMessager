@@ -26,8 +26,8 @@ public class Client implements ClientInterface {
 			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 			
 			String name = JOptionPane.showInputDialog("Enter name");
-			Operations.sendAuthorize(name, out);
 			
+			Operations.sendAuthorize(name, out);
 			//while (!answer.contains("accept")) {
 			//	name = JOptionPane.showInputDialog("Please enter another name");
 			//	Operations.sendAuthorize(name, out);

@@ -35,7 +35,8 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 	private DataOutputStream socketOut; 
 	
 	private String userName;
-	private List<String> history;
+	private String selectedName;
+	private Map<String, List<String>> history;
 	private JList<String> users;
 	private DefaultListModel<String> usersModel;
 	
@@ -45,8 +46,8 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		
 		pipedOut = output;
 		socketOut = out;
-		
 		userName = name;
+		history = new Hashtable<String, List<String>>();
 	}
 	
 	@SuppressWarnings( "unchecked" )
@@ -57,13 +58,21 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				MessageType receivedMessage = (MessageType) message.getValue();
 				
 				Date time = receivedMessage.getTime();
-				
 				String from = receivedMessage.getFromUser();
 				String to = receivedMessage.getToUser();
 				String text = receivedMessage.getMessage();
 				
 				if (!text.isEmpty()) {
 					messages.append(DateFormat.getDateInstance().format(time) + " (" + from + ") : " + text + "\n");
+					
+					List<String> list = null;
+					if (history.containsKey(from)) {
+						list = history.get(from);
+					} else {
+						list = new ArrayList<>();
+					}
+					list.add(text);
+					history.put(from, list);
 				}
 				break;
 			case USERS:
@@ -78,10 +87,11 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				usersModel.removeElement(userName);
 				break;
 			case HISTORY:
-				history = (List<String>) message.getValue();
+				List<String> list = (List<String>) message.getValue();
+				history.put(selectedName, list); 
 				
 				messages.setText("");
-				for (String str : history) {
+				for (String str : list) {
 					messages.append(str + "\n");
 				}
 				break;
@@ -127,15 +137,22 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		
 			@Override
 			public void valueChanged(ListSelectionEvent event) {
-				String name = users.getSelectedValue();
+				selectedName = users.getSelectedValue();
 				input.setEnabled(true);
 				sendButton.setEnabled(true);
 				messages.setText("");
 				
-				try {
-					Operations.sendConnectUser(name, socketOut);
-				} catch (Exception e) {
-					System.out.println("Can't connect to user");
+				if (history.containsKey(selectedName)) {
+					List<String> list = history.get(selectedName);
+					for (String str : list) {
+						messages.append(str);
+					}
+				} else {
+					try {
+						Operations.sendConnectUser(selectedName, socketOut);
+					} catch (Exception e) {
+						System.out.println("Can't connect to user");
+					}
 				}
 			}
 		};
