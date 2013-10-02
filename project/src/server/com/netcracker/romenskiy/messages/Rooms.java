@@ -7,7 +7,7 @@ import server.com.netcracker.romenskiy.*;
 import util.xml.*;
 import util.xml.message.*;
 
-public class Rooms {
+public class Rooms extends Observable {
 	
 	private static List<Room> rooms = new ArrayList<Room>();
 
@@ -19,6 +19,8 @@ public class Rooms {
 		}
 		Room room = new Room(user1, user2);
 		rooms.add(room);
+		setChanged();
+		notifyObservers(room);
 		return room;
 	}
 }

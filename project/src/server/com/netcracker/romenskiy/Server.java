@@ -17,6 +17,7 @@ public class Server {
 
 private static final Users users = new Users();
 private static final Logger logger = Logger.getLogger("im.server");
+private RoomsObserver o = new RoomsObserver();
 
 	public static void main(String... args) {
 		
