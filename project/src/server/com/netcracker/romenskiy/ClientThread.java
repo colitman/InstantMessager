@@ -29,8 +29,9 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 	private boolean disabled = false;
 	
 	private Map<Integer, Room> rooms;
+	private Rooms rooms1;
 	
-	public ClientThread(Socket socket, Users users) throws IOException {
+	public ClientThread(Socket socket, Users users, Rooms rooms1) throws IOException {
 		
 		logger.warn("New client is trying to connect to the chat...");
 		logger.info("Assigning a socket to a new client...");
@@ -46,6 +47,7 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		users.addObserver(this);
 		
 		this.rooms = new Hashtable<Integer, Room>();
+		this.rooms1 = rooms1;
 		
 		start();
 		logger.warn("Connection with new user is established.");
@@ -87,7 +89,7 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 			MessageType messageType = (MessageType)message.getValue();
 			String receiver = messageType.getToUser();
 			String sender = messageType.getFromUser();
-			Room room = Rooms.getRoom(sender, receiver);
+			Room room = rooms1.getRoom(sender, receiver);
 			if(!this.rooms.containsKey(room.hashCode())) {
 				this.rooms.put(room.hashCode(), room);
 				room.addObserver(this);
@@ -98,7 +100,7 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		
 		if (message.getType().equals("ConnectUserMessage")) {
 			String user = (String)message.getValue();
-			Room room = Rooms.getRoom(this.getClientName(), user);
+			Room room = rooms1.getRoom(this.getClientName(), user);
 			Operations.sendHistory(room.getLastFive(), out);
 		}
 	}

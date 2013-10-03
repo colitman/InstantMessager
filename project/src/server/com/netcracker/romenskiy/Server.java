@@ -17,13 +17,14 @@ public class Server {
 
 private static final Users users = new Users();
 private static final Logger logger = Logger.getLogger("im.server");
-private RoomsObserver o = new RoomsObserver();
 
 	public static void main(String... args) {
 		
 		DOMConfigurator.configure("res/log4j.xml");
 		ServerGUI gui = new ServerGUI(users);
 		SwingUtilities.invokeLater(gui);
+		Rooms r = new Rooms();
+		RoomsObserver o = new RoomsObserver(r);
 	
 		logger.warn("Starting a server...");
 		ServerSocket ss = null;
@@ -41,7 +42,7 @@ private RoomsObserver o = new RoomsObserver();
 			while(true) {
 				try {
 					s = ss.accept();
-					ClientThread client = new ClientThread(s, users);			
+					ClientThread client = new ClientThread(s, users, r);			
 				} catch (IOException ioe) {
 					if(s != null) {
 						try {

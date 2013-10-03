@@ -9,9 +9,13 @@ import util.xml.message.*;
 
 public class Rooms extends Observable {
 	
-	private static List<Room> rooms = new ArrayList<Room>();
+	private List<Room> rooms;
+	
+	public Rooms() {
+		rooms = new ArrayList<Room>();
+	}
 
-	public static Room getRoom(String user1, String user2) {
+	public Room getRoom(String user1, String user2) {
 		for(Room r:rooms) {
 			if(r.contains(user1, user2)) {
 				return r;

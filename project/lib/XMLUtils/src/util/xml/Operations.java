@@ -59,6 +59,37 @@ public class Operations {
 		}
 		
 	}
+	
+	public static void saveServerHistory(LinkedList<MessageType> message, File file) {
+	try{
+		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+		Element root = doc.createElement("server_history");
+		doc.appendChild(root);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		for(MessageType m:message) {
+			Element mes = doc.createElement("message");
+			root.appendChild(mes);
+			Element date = doc.createElement("date");
+			Element from = doc.createElement("from");
+			Element to = doc.createElement("to");
+			Element text = doc.createElement("text");
+			mes.appendChild(date);
+			mes.appendChild(from);
+			mes.appendChild(to);
+			mes.appendChild(text);
+			date.appendChild(doc.createTextNode(dateFormat.format(m.getTime())));
+			from.appendChild(doc.createTextNode(m.getFromUser()));
+			to.appendChild(doc.createTextNode(m.getToUser()));
+			text.appendChild(doc.createTextNode(m.getMessage()));
+		}
+		
+		Transformer t = TransformerFactory.newInstance().newTransformer();
+		t.setOutputProperty(OutputKeys.INDENT, "yes");
+		t.transform(new DOMSource(doc), new StreamResult(new FileOutputStream(file)));
+	} catch (Exception e) {
+		e.printStackTrace();
+	} 
+	}
 
 	public static void sendMessage(MessageType message, DataOutputStream output) throws IOException {
 		
