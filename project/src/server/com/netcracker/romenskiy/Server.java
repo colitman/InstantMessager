@@ -23,6 +23,7 @@ private static final Logger logger = Logger.getLogger("im.server");
 		DOMConfigurator.configure("res/log4j.xml");
 		ServerGUI gui = new ServerGUI(users);
 		SwingUtilities.invokeLater(gui);
+		
 		Rooms r = new Rooms();
 		RoomsObserver o = new RoomsObserver(r);
 	

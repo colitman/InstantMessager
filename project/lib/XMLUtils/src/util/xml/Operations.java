@@ -61,34 +61,60 @@ public class Operations {
 	}
 	
 	public static void saveServerHistory(LinkedList<MessageType> message, File file) {
-	try{
-		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-		Element root = doc.createElement("server_history");
-		doc.appendChild(root);
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		for(MessageType m:message) {
-			Element mes = doc.createElement("message");
-			root.appendChild(mes);
-			Element date = doc.createElement("date");
-			Element from = doc.createElement("from");
-			Element to = doc.createElement("to");
-			Element text = doc.createElement("text");
-			mes.appendChild(date);
-			mes.appendChild(from);
-			mes.appendChild(to);
-			mes.appendChild(text);
-			date.appendChild(doc.createTextNode(dateFormat.format(m.getTime())));
-			from.appendChild(doc.createTextNode(m.getFromUser()));
-			to.appendChild(doc.createTextNode(m.getToUser()));
-			text.appendChild(doc.createTextNode(m.getMessage()));
+		try{
+			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+			Element root = doc.createElement("server_history");
+			doc.appendChild(root);
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			for(MessageType m:message) {
+				Element mes = doc.createElement("message");
+				root.appendChild(mes);
+				Element date = doc.createElement("date");
+				Element from = doc.createElement("from");
+				Element to = doc.createElement("to");
+				Element text = doc.createElement("text");
+				mes.appendChild(date);
+				mes.appendChild(from);
+				mes.appendChild(to);
+				mes.appendChild(text);
+				date.appendChild(doc.createTextNode(dateFormat.format(m.getTime())));
+				from.appendChild(doc.createTextNode(m.getFromUser()));
+				to.appendChild(doc.createTextNode(m.getToUser()));
+				text.appendChild(doc.createTextNode(m.getMessage()));
+			}
+			
+			Transformer t = TransformerFactory.newInstance().newTransformer();
+			t.setOutputProperty(OutputKeys.INDENT, "yes");
+			t.transform(new DOMSource(doc), new StreamResult(new FileOutputStream(file)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+	}
+	
+	public static String[] readExistingRooms() {
+		try {
+			File folder = new File("server_history");
+			return folder.list();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		Transformer t = TransformerFactory.newInstance().newTransformer();
-		t.setOutputProperty(OutputKeys.INDENT, "yes");
-		t.transform(new DOMSource(doc), new StreamResult(new FileOutputStream(file)));
-	} catch (Exception e) {
-		e.printStackTrace();
-	} 
+		return null;
+	}
+	
+	public static ArrayList<MessageType> readHistoryFile(String fileName) {
+		try {
+			File file = new File(fileName);
+			
+			SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+			Schema schema = schemaFactory.newSchema(new File("res/history.xsd"));
+			
+			Document doc = getDocumentBuilder(schema).parse(file);
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static void sendMessage(MessageType message, DataOutputStream output) throws IOException {
@@ -332,6 +358,10 @@ public class Operations {
 	private static DocumentBuilder getDocumentBuilder(Schema schema) {
 		try {
 			DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+			
+			builderFactory.setNamespaceAware(true);
+			builderFactory.setIgnoringElementContentWhitespace(true);
+			
 			builderFactory.setSchema(schema);
 			DocumentBuilder builder = builderFactory.newDocumentBuilder();
 			return builder;
