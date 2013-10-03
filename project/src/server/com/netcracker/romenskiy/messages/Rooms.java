@@ -22,7 +22,7 @@ public class Rooms extends Observable {
 			index = fileName.indexOf("-");
 			indexOfPoint = fileName.indexOf(".");
 			String user1 = fileName.substring(0, index);
-			String user2 = fileName.substring(index + 1, indexOfPoint -1);
+			String user2 = fileName.substring(index + 1, indexOfPoint);
 			Room room = getRoom(user1, user2);
 			ArrayList<MessageType> messages = Operations.readHistoryFile("server_history/" + fileName);
 			room.setMessages(messages);
@@ -32,11 +32,9 @@ public class Rooms extends Observable {
 	public Room getRoom(String user1, String user2) {
 		for(Room r:rooms) {
 			if(r.contains(user1, user2)) {
-				System.out.println("Such Room exists");
 				return r;
 			}
 		}
-		System.out.println("new Room created");
 		Room room = new Room(user1, user2);
 		rooms.add(room);
 		setChanged();

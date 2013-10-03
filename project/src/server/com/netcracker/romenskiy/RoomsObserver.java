@@ -11,7 +11,6 @@ public class RoomsObserver implements Observer {
 	}
 
 	public void update(Observable source, Object object) {
-		System.out.println("works");
 		Room newRoom = (Room)object;
 		String path = "server_history/" + newRoom.getUser1() + "-" + newRoom.getUser2() + ".hst";
 		File file = new File(path);

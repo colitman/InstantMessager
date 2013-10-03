@@ -16,7 +16,6 @@ public class RoomObserver implements Observer {
 	}
 
 	public void update(Observable source, Object object) {
-		System.out.println("update in the RoomObserver");
 		MessageType message = (MessageType)object;
 		add(message);
 		saveFile(list, file);
