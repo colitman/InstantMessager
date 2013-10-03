@@ -32,9 +32,11 @@ public class Rooms extends Observable {
 	public Room getRoom(String user1, String user2) {
 		for(Room r:rooms) {
 			if(r.contains(user1, user2)) {
+				System.out.println("Such Room exists");
 				return r;
 			}
 		}
+		System.out.println("new Room created");
 		Room room = new Room(user1, user2);
 		rooms.add(room);
 		setChanged();

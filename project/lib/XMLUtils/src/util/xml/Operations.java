@@ -103,6 +103,8 @@ public class Operations {
 	
 	public static ArrayList<MessageType> readHistoryFile(String fileName) {
 		try {
+			ArrayList<MessageType> list = new ArrayList<MessageType>();
+			
 			File file = new File(fileName);
 			
 			SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
@@ -110,6 +112,37 @@ public class Operations {
 			
 			Document doc = getDocumentBuilder(schema).parse(file);
 			
+			Element root = doc.getDocumentElement();
+			
+			NodeList messages = root.getChildNodes();
+			
+			for(int i = 0; i < messages.getLength(); i++) {
+				Element messageElement = (Element) messages.item(i);
+				NodeList childs = messageElement.getChildNodes();
+				Element timeElement = (Element) childs.item(0);
+				String time = timeElement.getFirstChild().getNodeValue();
+				Element fromElement = (Element) childs.item(1);
+				String from = fromElement.getFirstChild().getNodeValue();
+				Element toElement = (Element) childs.item(2);
+				String to = toElement.getFirstChild().getNodeValue();
+				Element textElement = (Element) childs.item(3);
+				String text = textElement.getFirstChild().getNodeValue();
+
+				//Message message  = MessageFactory.getInstance().newMessage("SimpleMessage");
+				DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+				Date date = null;
+				try {
+					date = formatter.parse(time);
+				} catch (ParseException pe) {
+					pe.printStackTrace();
+					date = new Date();
+				}
+			
+				MessageType message = new MessageType(date, from, to, text);
+				list.add(message);
+			}
+			
+			return list;
 			
 		} catch (Exception e) {
 			e.printStackTrace();

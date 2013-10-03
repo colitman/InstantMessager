@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="server_history">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="message" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="message">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="date"/>
+        <xs:element ref="from"/>
+        <xs:element ref="to"/>
+        <xs:element ref="text"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="date" type="xs:string"/>
+  <xs:element name="from" type="xs:string"/>
+  <xs:element name="to" type="xs:string"/>
+  <xs:element name="text" type="xs:string"/>
+</xs:schema>
