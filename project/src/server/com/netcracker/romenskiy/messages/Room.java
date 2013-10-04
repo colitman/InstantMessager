@@ -18,6 +18,18 @@ public class Room extends Observable {
 		this.messages = new ArrayList<MessageType>();
 	}
 	
+	public String getUser1() {
+		return user1;
+	}
+	
+	public String getUser2() {
+		return user2;
+	}
+	
+	public void setMessages(ArrayList<MessageType> messages) {
+		this.messages = messages;
+	}
+	
 	public void add(MessageType message) {
 		messages.add(message);
 		setChanged();

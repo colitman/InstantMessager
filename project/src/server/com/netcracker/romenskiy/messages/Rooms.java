@@ -9,9 +9,27 @@ import util.xml.message.*;
 
 public class Rooms extends Observable {
 	
-	private static List<Room> rooms = new ArrayList<Room>();
+	private List<Room> rooms;
+	
+	public Rooms() {
+		rooms = new ArrayList<Room>();
+		String[] roomsFileNames = Operations.readExistingRooms();
+		int index;
+		String fileName;
+		int indexOfPoint;
+		for(int i = 0; i < roomsFileNames.length; i++) {
+			fileName = roomsFileNames[i];
+			index = fileName.indexOf("-");
+			indexOfPoint = fileName.indexOf(".");
+			String user1 = fileName.substring(0, index);
+			String user2 = fileName.substring(index + 1, indexOfPoint);
+			Room room = getRoom(user1, user2);
+			ArrayList<MessageType> messages = Operations.readHistoryFile("server_history/" + fileName);
+			room.setMessages(messages);
+		}
+	}
 
-	public static Room getRoom(String user1, String user2) {
+	public Room getRoom(String user1, String user2) {
 		for(Room r:rooms) {
 			if(r.contains(user1, user2)) {
 				return r;
