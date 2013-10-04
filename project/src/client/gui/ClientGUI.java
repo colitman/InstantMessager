@@ -179,6 +179,14 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		
 		getContentPane().add(splitPane, BorderLayout.CENTER);
 		
+		addWindowListener(new WindowAdapter() {
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				saveHistory();
+			}
+		});
+		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		pack();
 		setVisible(true);
@@ -213,8 +221,5 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 			System.out.println("File not found");
 		}
 	}
-	
-	private void loadHistory() { 
-		
-	}
+
 }
