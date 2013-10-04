@@ -153,9 +153,21 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 	}
 	
 	private void prepareClient() throws IOException {
-		logger.info("Waiting for client's name");
-		Message mes = Operations.receive(in);
-		setClientName((String)mes.getValue());
+		Message mes = null;
+		String name = null;
+		do {
+			logger.info("Waiting for client's name");
+			System.out.println("Waiting for client's name");
+			mes = Operations.receive(in);
+			name = (String)mes.getValue();
+			if(!users.contain(name)) {
+				break;
+			}
+			System.out.println("rejected");
+			Operations.sendAnswer("AUTH_FAIL", out);
+		} while(true);
+		
+		setClientName(name);
 		logger.info("Username for " + s.getInetAddress() + " received: " + userName);
 		
 		users.add(this);

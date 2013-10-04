@@ -36,6 +36,16 @@ public class Users extends Observable {
 		notifyObservers(ct);
 	}
 	
+	public boolean contain(String username) {
+		for(ClientThread ct:users) {
+			if(ct.getClientName().equals(username)) {
+				System.out.println("uzhe est");
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/**
 	*Returns the number of active users
 	*/
