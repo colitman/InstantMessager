@@ -61,8 +61,9 @@ public class Operations {
 	}
 	
 	public static void saveServerHistory(LinkedList<MessageType> message, File file) {
+		Document doc = null;
 		try{
-			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+			doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 			Element root = doc.createElement("server_history");
 			doc.appendChild(root);
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -82,72 +83,84 @@ public class Operations {
 				to.appendChild(doc.createTextNode(m.getToUser()));
 				text.appendChild(doc.createTextNode(m.getMessage()));
 			}
+		} catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+		}
 			
+		FileOutputStream fos = null;
+		
+		try {
+			fos = new FileOutputStream(file);
 			Transformer t = TransformerFactory.newInstance().newTransformer();
 			t.setOutputProperty(OutputKeys.INDENT, "yes");
-			t.transform(new DOMSource(doc), new StreamResult(new FileOutputStream(file)));
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
+			t.transform(new DOMSource(doc), new StreamResult(fos));
+		} catch (TransformerConfigurationException tce) {
+			tce.printStackTrace();
+		} catch (TransformerException te) {
+			te.printStackTrace();
+		} catch (FileNotFoundException fnf) {
+			fnf.printStackTrace();
+			try {
+				if(fos != null) {
+					fos.close();
+				}
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+		}
 	}
 	
 	public static String[] readExistingRooms() {
-		try {
-			File folder = new File("server_history");
-			return folder.list();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+		File folder = new File("server_history");
+		return folder.list();
 	}
 	
 	public static ArrayList<MessageType> readHistoryFile(String fileName) {
+		ArrayList<MessageType> list = new ArrayList<MessageType>();
+		File file = new File(fileName);
+		Schema schema = null;
+		Document doc = null;
+		
 		try {
-			ArrayList<MessageType> list = new ArrayList<MessageType>();
-			
-			File file = new File(fileName);
-			
-			SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
-			Schema schema = schemaFactory.newSchema(new File("res/history.xsd"));
-			
-			Document doc = getDocumentBuilder(schema).parse(file);
-			
-			Element root = doc.getDocumentElement();
-			
-			NodeList messages = root.getChildNodes();
-			
-			for(int i = 0; i < messages.getLength(); i++) {
-				Element messageElement = (Element) messages.item(i);
-				NodeList childs = messageElement.getChildNodes();
-				Element timeElement = (Element) childs.item(0);
-				String time = timeElement.getFirstChild().getNodeValue();
-				Element fromElement = (Element) childs.item(1);
-				String from = fromElement.getFirstChild().getNodeValue();
-				Element toElement = (Element) childs.item(2);
-				String to = toElement.getFirstChild().getNodeValue();
-				Element textElement = (Element) childs.item(3);
-				String text = textElement.getFirstChild().getNodeValue();
-
-				//Message message  = MessageFactory.getInstance().newMessage("SimpleMessage");
-				DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-				Date date = null;
-				try {
-					date = formatter.parse(time);
-				} catch (ParseException pe) {
-					pe.printStackTrace();
-					date = new Date();
-				}
-			
-				MessageType message = new MessageType(date, from, to, text);
-				list.add(message);
-			}
-			
+		SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+		schema = schemaFactory.newSchema(new File("res/history.xsd"));
+		doc = getDocumentBuilder(schema).parse(file);
+		} catch (SAXException se) {
+			se.printStackTrace();
 			return list;
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			return list;
 		}
-		return null;
+		
+		Element root = doc.getDocumentElement();
+		NodeList messages = root.getChildNodes();
+		for(int i = 0; i < messages.getLength(); i++) {
+			Element messageElement = (Element) messages.item(i);
+			NodeList childs = messageElement.getChildNodes();
+			Element timeElement = (Element) childs.item(0);
+			String time = timeElement.getFirstChild().getNodeValue();
+			Element fromElement = (Element) childs.item(1);
+			String from = fromElement.getFirstChild().getNodeValue();
+			Element toElement = (Element) childs.item(2);
+			String to = toElement.getFirstChild().getNodeValue();
+			Element textElement = (Element) childs.item(3);
+			String text = textElement.getFirstChild().getNodeValue();
+
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = null;
+			try {
+				date = formatter.parse(time);
+			} catch (ParseException pe) {
+				pe.printStackTrace();
+				date = new Date();
+			}
+		
+			MessageType message = new MessageType(date, from, to, text);
+			list.add(message);
+		}
+		
+		return list;
 	}
 
 	public static void sendMessage(MessageType message, DataOutputStream output) throws IOException {
