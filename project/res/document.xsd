@@ -17,10 +17,10 @@
   </xs:element>
   
   <xs:complexType name="fullHistoryType">
-	<sequence>
+	<xs:sequence>
 	  <xs:element name="amount" type="xs:integer"/>
-	  <xs:element history="history" type="xs:historyType" minOccurs="0" maxOccurs="unbounded"/>
-	</sequence>
+	  <xs:element name="history" type="historyType" minOccurs="0" maxOccurs="unbounded"/>
+	</xs:sequence>
   </xs:complexType>
 	  
   <xs:complexType name="messageType">
