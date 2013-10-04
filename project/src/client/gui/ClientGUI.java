@@ -13,6 +13,7 @@ import javax.swing.event.*;
 
 import util.xml.*;
 import util.xml.message.*;
+import util.xml.message.Message;
 
 import client.thread.*;
 
@@ -24,6 +25,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 	private static final String USERS = "UserListMessage";
 	private static final String ANSWER = "AnswerMessage";
 	private static final String HISTORY = "HistoryMessage";
+	private static final String FULL_HISTORY = "FullHistoryMessage";
 	private static final String CONNECT = "ConnectUserMessage";
 	
 	private JTextField input;
@@ -93,8 +95,10 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				for (String str : list) {
 					messages.append(str + "\n");
 				}
+				break;	
+			case FULL_HISTORY:
+				history = (Map<String, List<String>>) message.getValue();
 				break;
-			
 		}
 	}
 	
@@ -196,5 +200,21 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 			output.println(input.getText());
 			input.setText("");
 		}
+	}
+	
+	private void saveHistory() {
+		try {
+			File file = new File("history/history.hst");
+			FileOutputStream out = new FileOutputStream(file);
+			DataOutputStream dataOut = new DataOutputStream(out);
+		
+			Operations.sendFullHistory(history, dataOut);
+		} catch (Exception e) {
+			System.out.println("File not found");
+		}
+	}
+	
+	private void loadHistory() { 
+		
 	}
 }

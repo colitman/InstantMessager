@@ -11,10 +11,18 @@
 		<xs:element name="answer" type="answerType"/>
 		<xs:element name="connectUser" type="connectUserType"/>
 		<xs:element name="history" type="historyType"/>
+		<xs:element name="fullHistory" type="fullHistoryType"/>
       </xs:choice>
     </xs:complexType>
   </xs:element>
   
+  <xs:complexType name="fullHistoryType">
+	<sequence>
+	  <xs:element name="amount" type="xs:integer"/>
+	  <xs:element history="history" type="xs:historyType" minOccurs="0" maxOccurs="unbounded"/>
+	</sequence>
+  </xs:complexType>
+	  
   <xs:complexType name="messageType">
     <xs:sequence>
       <xs:element name="date" type="xs:date"/>

@@ -25,6 +25,7 @@ public class Operations {
 	private static final String USERS = "userList";
 	private static final String ANSWER = "answer";
 	private static final String HISTORY = "history";
+	private static final String FULL_HISTORY = "fullHistory";
 	private static final String CONNECT = "connectUser";
 
 	public static Message receive(DataInputStream input) throws IOException {
@@ -54,6 +55,8 @@ public class Operations {
 				return receiveHistory(document);
 			case CONNECT:
 				return receiveConnectUser(document);
+			case FULL_HISTORY:
+				return receiveFullHistory(document);
 			default:
 				return null;
 		}
@@ -295,6 +298,56 @@ public class Operations {
 		
 		Message message  = MessageFactory.getInstance().newMessage("ConnectUserMessage");
 		message.setValue(nameElement.getFirstChild().getNodeValue());
+		return message;
+	}
+	
+	public static void sendFullHistory(Map<String, List<String>> history, DataOutputStream output) throws IOException {
+		Schema schema = getSchema();
+		
+		Document document = getDocumentBuilder(schema).newDocument();
+		
+		Element root = document.createElement("document");
+		document.appendChild(root);
+		Element fullHistory = document.createElement("fullHistory");
+		root.appendChild(fullHistory);
+		Element amount = document.createElement("amount");
+		amount.appendChild(document.createTextNode(String.valueOf(history.size())));
+		fullHistory.appendChild(amount);
+		Set<String> keys = history.keySet();
+		for (String key : keys) {
+			Element historyElement = document.createElement(key);
+			List<String> list = history.get(key);
+			for (String str : list) {
+				Element message = document.createElement("message");
+				message.appendChild(document.createTextNode(str));
+				historyElement.appendChild(message);
+			}
+			fullHistory.appendChild(historyElement);
+		}
+		
+		DOMSource source = validate(document, schema);
+		
+		String send = DOMtoString(source);
+		output.writeUTF(send);
+		output.flush();
+	}
+	
+	public static Message receiveFullHistory(Document document) {
+		Element root = document.getDocumentElement();
+		Element fullHistoryElement = (Element) root.getFirstChild();
+		Element amountElement = (Element) fullHistoryElement.getFirstChild();
+		int amount = Integer.valueOf(amountElement.getFirstChild().getNodeValue());
+		Map<String, List<String>> fullHistory = new Hashtable<>();
+		for (Element history = (Element) fullHistoryElement.getNextSibling(); history != null; history = (Element) fullHistoryElement.getNextSibling()) {
+			List<String> list = new ArrayList<>();
+			for (Element message = (Element) history.getFirstChild(); message != null; message = (Element) history.getNextSibling()) {
+				list.add(message.getFirstChild().getNodeValue());
+			}
+			fullHistory.put(history.getTagName(), list);
+		}
+		
+		Message message = MessageFactory.getInstance().newMessage("fullHistoryMessage");
+		message.setValue(fullHistory);
 		return message;
 	}
 	
