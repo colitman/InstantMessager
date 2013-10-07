@@ -64,7 +64,9 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				String text = receivedMessage.getMessage();
 				
 				if (!text.isEmpty()) {
-					messages.append(DateFormat.getDateInstance().format(time) + " (" + from + ") : " + text + "\n");
+					if (from.equals(selectedName)) {
+						messages.append(DateFormat.getDateInstance().format(time) + " (" + from + ") : " + text + "\n");
+					}
 					
 					List<String> list = null;
 					if (history.containsKey(from)) {

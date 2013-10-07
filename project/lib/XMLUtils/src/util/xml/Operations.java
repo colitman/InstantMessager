@@ -422,7 +422,7 @@ public class Operations {
 			List<String> list = history.get(key);
 			for (String str : list) {
 				Element message = document.createElement("message");
-				message.appendChild(document.createTextNode(str));
+				message.appendChild(document.createTextNode(str + "\n"));
 				historyElement.appendChild(message);
 			}
 			fullHistory.appendChild(historyElement);
