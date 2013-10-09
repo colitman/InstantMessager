@@ -51,9 +51,8 @@ public class Client implements ClientInterface {
 			Thread inputThread = new Thread(input);
 			inputThread.start();
 			
-			
 			input.addObserver(gui);
-		
+			
 		} catch (Exception e) {
 			System.out.println("Error: Unknown host");
 			System.out.println("Please check your internet connection");

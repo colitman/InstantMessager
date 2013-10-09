@@ -184,6 +184,11 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		addWindowListener(new WindowAdapter() {
 			
 			@Override
+			public void windowActivated(WindowEvent e) {
+				loadHistory();
+			}
+			
+			@Override
 			public void windowClosing(WindowEvent e) {
 				saveHistory();
 			}
@@ -214,13 +219,26 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 	
 	private void saveHistory() {
 		try {
-			File file = new File("history/history.hst");
+			File file = new File("client_history/history.hst");
 			FileOutputStream out = new FileOutputStream(file);
 			DataOutputStream dataOut = new DataOutputStream(out);
 		
 			Operations.sendFullHistory(history, dataOut);
 		} catch (Exception e) {
-			System.out.println("File not found");
+			System.out.println("Failed to save history");
+		}
+	}
+	
+	private void loadHistory() {
+		try {
+			File file = new File("client_history/history.hst");
+			FileInputStream in = new FileInputStream(file);
+			DataInputStream dataIn = new DataInputStream(in);
+			
+			Message message = Operations.receive(dataIn);
+			update(null, message);
+		} catch (Exception e) {
+			System.out.println("Failed to load history");
 		}
 	}
 
