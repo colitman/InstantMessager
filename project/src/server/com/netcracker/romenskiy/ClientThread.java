@@ -127,6 +127,7 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		if (source instanceof Room) {
 			try{
 				Operations.sendMessage((MessageType)object, out);
+				System.out.println("Sent to " + userName);
 			} catch (IOException ioe) {
 				if (out != null) {
 					try {
@@ -157,7 +158,6 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		String name = null;
 		do {
 			logger.info("Waiting for client's name");
-			System.out.println("Waiting for client's name");
 			mes = Operations.receive(in);
 			name = (String)mes.getValue();
 			if(!users.contain(name)) {
