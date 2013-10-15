@@ -441,9 +441,13 @@ public class Operations {
 		Element amountElement = (Element) fullHistoryElement.getFirstChild();
 		int amount = Integer.valueOf(amountElement.getFirstChild().getNodeValue());
 		Map<String, List<String>> fullHistory = new Hashtable<String, List<String>>();
-		for (Element history = (Element) fullHistoryElement.getNextSibling(); history != null; history = (Element) fullHistoryElement.getNextSibling()) {
+		NodeList fullHistoryChilds = fullHistoryElement.getChildNodes();
+		for (int i = 1; i < fullHistoryChilds.getLength(); i++) {
+			Element history = (Element) fullHistoryChilds.item(i);
 			List<String> list = new ArrayList<>();
-			for (Element message = (Element) history.getFirstChild(); message != null; message = (Element) history.getNextSibling()) {
+			NodeList historyChilds = history.getChildNodes();
+			for (int j = 0; j < historyChilds.getLength(); j++) {
+				Element message = (Element) historyChilds.item(j);
 				list.add(message.getFirstChild().getNodeValue());
 			}
 			fullHistory.put(history.getTagName(), list);
