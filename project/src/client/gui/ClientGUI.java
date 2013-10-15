@@ -238,7 +238,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 			Message message = Operations.receive(dataIn);
 			update(null, message);
 		} catch (Exception e) {
-			System.out.println("Failed to load history");
+			
 		}
 	}
 
