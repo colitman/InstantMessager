@@ -64,7 +64,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				String text = receivedMessage.getMessage();
 				
 				if (!text.isEmpty()) {
-					if (selectedName != null && from.equals(selectedName)) {
+					if (selectedName != null && (from.equals(selectedName) || from.equals(userName))) {
 						messages.append(DateFormat.getDateInstance().format(time) + " (" + from + ") : " + text + "\n");
 					}
 					
