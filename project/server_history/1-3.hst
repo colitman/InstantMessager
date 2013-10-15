@@ -2,8 +2,14 @@
 <server_history>
 <message>
 <date>2013-10-10</date>
-<from>2</from>
+<from>1</from>
+<to>3</to>
+<text>Hello</text>
+</message>
+<message>
+<date>2013-10-10</date>
+<from>3</from>
 <to>1</to>
-<text>Bye</text>
+<text>Hi</text>
 </message>
 </server_history>

@@ -418,7 +418,7 @@ public class Operations {
 		fullHistory.appendChild(amount);
 		Set<String> keys = history.keySet();
 		for (String key : keys) {
-			Element historyElement = document.createElement(key);
+			Element historyElement = document.createElement("history");
 			List<String> list = history.get(key);
 			for (String str : list) {
 				Element message = document.createElement("message");
@@ -440,7 +440,7 @@ public class Operations {
 		Element fullHistoryElement = (Element) root.getFirstChild();
 		Element amountElement = (Element) fullHistoryElement.getFirstChild();
 		int amount = Integer.valueOf(amountElement.getFirstChild().getNodeValue());
-		Map<String, List<String>> fullHistory = new Hashtable<>();
+		Map<String, List<String>> fullHistory = new Hashtable<String, List<String>>();
 		for (Element history = (Element) fullHistoryElement.getNextSibling(); history != null; history = (Element) fullHistoryElement.getNextSibling()) {
 			List<String> list = new ArrayList<>();
 			for (Element message = (Element) history.getFirstChild(); message != null; message = (Element) history.getNextSibling()) {

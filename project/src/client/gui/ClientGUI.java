@@ -72,14 +72,15 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 					if (history.containsKey(from)) {
 						list = history.get(from);
 					} else {
-						list = new ArrayList<>();
+						list = new ArrayList<String>();
+						history.put(from, list);
 					}
 					list.add(text);
-					history.put(from, list);
+					
 				}
 				break;
 			case USERS:
-				List<String> users = (List<String>) message.getValue();
+				ArrayList<String> users = (ArrayList<String>) message.getValue();
 				
 				usersModel.clear();				
 					
@@ -90,7 +91,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				usersModel.removeElement(userName);
 				break;
 			case HISTORY:
-				List<String> list = (List<String>) message.getValue();
+				ArrayList<String> list = (ArrayList<String>) message.getValue();
 				history.put(selectedName, list); 
 				
 				messages.setText("");
@@ -146,17 +147,18 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				input.setEnabled(true);
 				sendButton.setEnabled(true);
 				messages.setText("");
-				
-				if (history.containsKey(selectedName)) {
-					List<String> list = history.get(selectedName);
-					for (String str : list) {
-						messages.append(str);
-					}
-				} else {
-					try {
-						Operations.sendConnectUser(selectedName, socketOut);
-					} catch (Exception e) {
-						System.out.println("Can't connect to user");
+				if(selectedName != null) {
+					if (history.containsKey(selectedName)) {
+						List<String> list = history.get(selectedName);
+						for (String str : list) {
+							messages.append(str + "\n");
+						}
+					} else {
+						try {
+							Operations.sendConnectUser(selectedName, socketOut);
+						} catch (Exception e) {
+							System.out.println("Can't connect to user");
+						}
 					}
 				}
 			}
@@ -191,10 +193,12 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				saveHistory();
+				setVisible(false);
+				System.exit(0);
 			}
 		});
 		
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		pack();
 		setVisible(true);
 	}	
@@ -226,6 +230,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 			Operations.sendFullHistory(history, dataOut);
 		} catch (Exception e) {
 			System.out.println("Failed to save history");
+			e.printStackTrace();
 		}
 	}
 	
