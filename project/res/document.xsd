@@ -58,10 +58,10 @@
   </xs:complexType>
   
   <xs:complexType name="historyType">
-	<xs:attribute name="username" type="xs:string"/>
 	<xs:sequence>
 	  <xs:element name="message" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 	</xs:sequence>
+	<xs:attribute name="username" type="xs:string"/>
   </xs:complexType>
   
 </xs:schema>
