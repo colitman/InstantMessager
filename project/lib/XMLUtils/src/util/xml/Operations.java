@@ -419,6 +419,7 @@ public class Operations {
 		Set<String> keys = history.keySet();
 		for (String key : keys) {
 			Element historyElement = document.createElement("history");
+			historyElement.setAttribute("username", key);
 			List<String> list = history.get(key);
 			for (String str : list) {
 				Element message = document.createElement("message");
@@ -450,7 +451,7 @@ public class Operations {
 				Element message = (Element) historyChilds.item(j);
 				list.add(message.getFirstChild().getNodeValue());
 			}
-			fullHistory.put(history.getTagName(), list);
+			fullHistory.put(history.getAttribute("username"), list);
 		}
 		
 		Message message = MessageFactory.getInstance().newMessage("fullHistoryMessage");
