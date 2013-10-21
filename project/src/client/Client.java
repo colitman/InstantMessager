@@ -27,7 +27,14 @@ public class Client implements ClientInterface {
 			
 			String name = JOptionPane.showInputDialog("Enter name");
 			
-			Operations.sendAuthorize(name, out);
+			do {
+				Operations.sendAuthorize(name, out);
+				Message answer = Operations.receive(in);
+				if (!answer.equals("AUTH_FAIL")) {
+					break;
+				}
+				name = JOptionPane.showInputDialog("Enter another name");
+			} while (true);
 			
 			writer = new PipedWriter();
 			reader = new PipedReader(writer);

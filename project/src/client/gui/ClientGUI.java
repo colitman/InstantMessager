@@ -102,6 +102,12 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 			case FULL_HISTORY:
 				history = (Map<String, List<String>>) message.getValue();
 				break;
+			case ANSWER:
+				String answer = (String) message.getValue();
+				if (answer.equals("AUTH_FAIL")) {
+					
+				}
+				break;
 		}
 	}
 	
