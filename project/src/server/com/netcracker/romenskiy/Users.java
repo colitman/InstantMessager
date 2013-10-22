@@ -39,7 +39,6 @@ public class Users extends Observable {
 	public boolean contain(String username) {
 		for(ClientThread ct:users) {
 			if(ct.getClientName().equals(username)) {
-				System.out.println("uzhe est");
 				return true;
 			}
 		}

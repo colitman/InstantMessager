@@ -24,8 +24,9 @@ private static final Logger logger = Logger.getLogger("im.server");
 		ServerGUI gui = new ServerGUI(users);
 		SwingUtilities.invokeLater(gui);
 		
-		Rooms r = new Rooms();
-		RoomsObserver o = new RoomsObserver(r);
+		RoomsObserver o = new RoomsObserver();
+		Rooms r = new Rooms(o);
+		
 	
 		logger.warn("Starting a server...");
 		ServerSocket ss = null;

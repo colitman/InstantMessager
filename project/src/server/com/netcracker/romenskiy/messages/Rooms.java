@@ -6,12 +6,17 @@ import java.util.*;
 import server.com.netcracker.romenskiy.*;
 import util.xml.*;
 import util.xml.message.*;
+import org.apache.log4j.*;
 
 public class Rooms extends Observable {
 	
 	private List<Room> rooms;
+	private static final Logger logger = Logger.getLogger("im.server");
 	
-	public Rooms() {
+	public Rooms(RoomsObserver o) {
+		this.addObserver(o);
+		logger.info("RoomsObserver has been added");
+		logger.info("Searching and creating rooms from log files");
 		rooms = new ArrayList<Room>();
 		String[] roomsFileNames = Operations.readExistingRooms();
 		int index;
@@ -32,13 +37,16 @@ public class Rooms extends Observable {
 	public Room getRoom(String user1, String user2) {
 		for(Room r:rooms) {
 			if(r.contains(user1, user2)) {
+				logger.info("Existing room was found for " + user1 + " and " + user2);
 				return r;
 			}
 		}
 		Room room = new Room(user1, user2);
 		rooms.add(room);
+		logger.info("New room for " + user1 + " and " + user2 + " was added to the room list");
 		setChanged();
 		notifyObservers(room);
+		logger.info("RoomsObserver notified about new room");
 		return room;
 	}
 }

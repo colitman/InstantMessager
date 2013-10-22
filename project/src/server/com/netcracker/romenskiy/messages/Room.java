@@ -6,16 +6,19 @@ import java.util.*;
 import server.com.netcracker.romenskiy.*;
 import util.xml.*;
 import util.xml.message.*;
+import org.apache.log4j.*;
 
 public class Room extends Observable {
 	private String user1;
 	private String user2;
 	private List<MessageType> messages;
+	private static final Logger logger = Logger.getLogger("im.server");
 	
 	public Room (String user1, String user2) {
 		this.user1 = user1;
 		this.user2 = user2;
 		this.messages = new ArrayList<MessageType>();
+		logger.info("New room was created for " + user1 + " and " + user2);
 	}
 	
 	public String getUser1() {

@@ -89,12 +89,18 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 			MessageType messageType = (MessageType)message.getValue();
 			String receiver = messageType.getToUser();
 			String sender = messageType.getFromUser();
+			logger.info("Searching room for " + receiver + " and " + sender);
 			Room room = rooms1.getRoom(sender, receiver);
 			if(!this.rooms.containsKey(room.hashCode())) {
+				logger.info("ClientThread does not know this room");
 				this.rooms.put(room.hashCode(), room);
+				logger.info("ClientThread has remembered this room");
 				room.addObserver(this);
+				logger.info("Sender Thread was added as an observer for this room");
 				room.addObserver(users.get(receiver));
+				logger.info("Receiver Thread was added as an observer for this room");
 			}
+			logger.info("ClientThread knows this room");
 			room.add(messageType);
 		}
 		
@@ -102,6 +108,7 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 			String user = (String)message.getValue();
 			Room room = rooms1.getRoom(this.getClientName(), user);
 			Operations.sendHistory(room.getLastFive(), out);
+			logger.info("History sent for " + this.getClientName() + " and " + user);
 		}
 	}
 	
@@ -127,7 +134,6 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 		if (source instanceof Room) {
 			try{
 				Operations.sendMessage((MessageType)object, out);
-				System.out.println("Sent to " + userName);
 			} catch (IOException ioe) {
 				if (out != null) {
 					try {
@@ -161,9 +167,11 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 			mes = Operations.receive(in);
 			name = (String)mes.getValue();
 			if(!users.contain(name)) {
+				logger.info("Username \"" + name + "\" accepted");
+				Operations.sendAnswer("AUTH_ACCEPT", out);
 				break;
 			}
-			System.out.println("rejected");
+			logger.info("Username \"" + name + "\" rejected");
 			Operations.sendAnswer("AUTH_FAIL", out);
 		} while(true);
 		
