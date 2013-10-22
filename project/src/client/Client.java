@@ -30,7 +30,8 @@ public class Client implements ClientInterface {
 			do {
 				Operations.sendAuthorize(name, out);
 				Message answer = Operations.receive(in);
-				if (!answer.equals("AUTH_FAIL")) {
+				String code = (String)answer.getValue();
+				if (!code.equals("AUTH_FAIL")) {
 					break;
 				}
 				name = JOptionPane.showInputDialog("Enter another name");
