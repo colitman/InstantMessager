@@ -229,7 +229,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 	
 	private void saveHistory() {
 		try {
-			File file = new File("client_history/history.hst");
+			File file = new File("client_history/" + userName + ".hst");
 			FileOutputStream out = new FileOutputStream(file);
 			DataOutputStream dataOut = new DataOutputStream(out);
 		
@@ -242,7 +242,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 	
 	private void loadHistory() {
 		try {
-			File file = new File("client_history/history.hst");
+			File file = new File("client_history/" + userName + ".hst");
 			FileInputStream in = new FileInputStream(file);
 			DataInputStream dataIn = new DataInputStream(in);
 			
