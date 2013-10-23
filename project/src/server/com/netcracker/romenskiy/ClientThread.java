@@ -126,6 +126,13 @@ public class ClientThread extends Thread implements Observer, ServerInterface {
 				try {
 					Operations.sendUserNamesList(users.getUserNames(), out);
 				} catch (IOException io) {
+					if (out != null) {
+						try {
+							out.close();
+						} catch (Exception e) {
+							logger.error("Failed to close the output stream", e);
+						}
+					}
 					logger.error("IO Exception", io);
 				}
 			}
