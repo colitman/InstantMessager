@@ -65,7 +65,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				MessageType receivedMessage = (MessageType) message.getValue();
 				
 				Date time = receivedMessage.getTime();
-				String from = receivedMessage.getFromUser();
+				String from = checkName(receivedMessage.getFromUser());
 				String to = receivedMessage.getToUser();
 				String text = receivedMessage.getMessage();
 				
@@ -173,7 +173,8 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		
 			@Override
 			public void valueChanged(ListSelectionEvent event) {
-				selectedName = users.getSelectedValue();
+				selectedName = checkName(users.getSelectedValue());
+				
 				input.setEnabled(true);
 				sendButton.setEnabled(true);
 				messages.setText("");
@@ -288,6 +289,12 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 			update(null, message);
 		} catch (Exception e) {
 			logger.warn("Failed to load history from file : " + fileName);
+		}
+	}
+	
+	private String checkName(String name) {
+		if (name.endsWith("*")) {
+			return name.substring(0, name.length() - 1);
 		}
 	}
 
