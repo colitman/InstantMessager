@@ -33,7 +33,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 	private JScrollPane scroll;
 	private JButton sendButton;
 	private JList<String> users;
-	private DefaultListModel<String> usersModel;
+	private DefaultListModel<String> usersModel = new DefaultListModel<String>();
 	
 	private PrintWriter pipedOut;
 	private DataOutputStream socketOut; 
@@ -141,7 +141,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		
 		input.addActionListener(new SendButtonListener(input, pipedOut));
 		
-		usersModel = new DefaultListModel<String>();
+		// usersModel = new DefaultListModel<String>();
 		
 		users = new JList<String>(usersModel);
 		
