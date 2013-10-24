@@ -15,10 +15,14 @@ import util.xml.*;
 import util.xml.message.*;
 import util.xml.message.Message;
 
+import org.apache.log4j.*;
+import org.apache.log4j.xml.*;
+
 import client.thread.*;
 
 public class ClientGUI extends JFrame implements Observer, Runnable {
 	
+	private static final Logger logger = Logger.getLogger("im.client");
 	private static final long serialVersionUID = 4229L;
 	private static final String SIMPLE = "SimpleMessage";
 	private static final String AUTH = "AuthorizeMessage";
@@ -41,6 +45,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 	private String userName;
 	private String selectedName;
 	private Map<String, List<String>> history;
+	private List<String> nonReadedUsers;
 	
 	public ClientGUI(PrintWriter output, String name, DataOutputStream out) {
 		super("Client - " + name);
@@ -49,6 +54,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		socketOut = out;
 		userName = name;
 		history = new Hashtable<String, List<String>>();
+		nonReadedUsers = new ArrayList<>();
 	}
 	
 	@SuppressWarnings( "unchecked" )
@@ -64,8 +70,13 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				String text = receivedMessage.getMessage();
 				
 				if (!text.isEmpty()) {
+					logger.info("Receiving message from server...");
 					if (selectedName != null && (from.equals(selectedName) || from.equals(userName))) {
 						messages.append(DateFormat.getDateInstance().format(time) + " (" + from + ") : " + text + "\n");
+					} else {
+						usersModel.removeElement(from);
+						usersModel.addElement(from + "*");
+						nonReadedUsers.add(from);
 					}
 					
 					List<String> list = null;
@@ -80,6 +91,8 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				}
 				break;
 			case USERS:
+				logger.info("Receiving users list from server...");
+				
 				ArrayList<String> users = (ArrayList<String>) message.getValue();
 				
 				usersModel.clear();				
@@ -91,6 +104,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				usersModel.removeElement(userName);
 				break;
 			case HISTORY:
+				logger.info("Receiving history from server...");
 				ArrayList<String> list = (ArrayList<String>) message.getValue();
 				history.put(selectedName, list); 
 				
@@ -100,9 +114,11 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				}
 				break;	
 			case FULL_HISTORY:
+				logger.info("Receiving full history from server...");
 				history = (Map<String, List<String>>) message.getValue();
 				break;
 			case ANSWER:
+				logger.info("Receiving answer from server...");
 				String answer = (String) message.getValue();
 				if (answer.equals("AUTH_FAIL")) {
 					
@@ -113,6 +129,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 	
 	@Override
 	public void run() {
+		logger.info("Creating frame...");
 		createFrame();
 	}
 	
@@ -141,8 +158,6 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		
 		input.addActionListener(new SendButtonListener(input, pipedOut));
 		
-		// usersModel = new DefaultListModel<String>();
-		
 		users = new JList<String>(usersModel);
 		
 		ListSelectionListener listSelection = new ListSelectionListener() {
@@ -153,17 +168,25 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				input.setEnabled(true);
 				sendButton.setEnabled(true);
 				messages.setText("");
+				logger.info("Selected user - " + selectedName);
+				
+				if (nonReadedUsers.contains(selectedName)) {
+					nonReadedUsers.remove(selectedName);
+				}
 				if(selectedName != null) {
+					logger.info("Loading history...");
 					if (history.containsKey(selectedName)) {
+						logger.info("Loading local history...");
 						List<String> list = history.get(selectedName);
 						for (String str : list) {
 							messages.append(str + "\n");
 						}
 					} else {
 						try {
+							logger.info("Sending request to server to load history...");
 							Operations.sendConnectUser(selectedName, socketOut);
 						} catch (Exception e) {
-							System.out.println("Can't connect to user");
+							logger.warn("Failed to load history");
 						}
 					}
 				}
@@ -193,11 +216,13 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 			
 			@Override
 			public void windowActivated(WindowEvent e) {
+				logger.info("Activating window...");
 				loadHistory();
 			}
 			
 			@Override
 			public void windowClosing(WindowEvent e) {
+				logger.info("Closing window...");
 				saveHistory();
 				setVisible(false);
 				System.exit(0);
@@ -220,6 +245,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		}
 		
 		public void actionPerformed(ActionEvent event) {
+			logger.info("Sending message...");
 			output.println(userName);
 			output.println(users.getSelectedValue());
 			output.println(input.getText());
@@ -228,28 +254,31 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 	}
 	
 	private void saveHistory() {
+		String fileName = "client_history/" + userName + ".hst";
 		try {
-			File file = new File("client_history/" + userName + ".hst");
+			logger.info("Trying to save history at file : " + fileName);
+			File file = new File(fileName);
 			FileOutputStream out = new FileOutputStream(file);
 			DataOutputStream dataOut = new DataOutputStream(out);
 		
 			Operations.sendFullHistory(history, dataOut);
 		} catch (Exception e) {
-			System.out.println("Failed to save history");
-			e.printStackTrace();
+			logger.warn("Failed to save history at file : " + fileName);
 		}
 	}
 	
 	private void loadHistory() {
+		String fileName = "client_history/" + userName + ".hst";
 		try {
-			File file = new File("client_history/" + userName + ".hst");
+			logger.info("Trying to load history from file : " + fileName);
+			File file = new File(fileName);
 			FileInputStream in = new FileInputStream(file);
 			DataInputStream dataIn = new DataInputStream(in);
 			
 			Message message = Operations.receive(dataIn);
 			update(null, message);
 		} catch (Exception e) {
-			
+			logger.warn("Failed to load history from file : " + fileName);
 		}
 	}
 

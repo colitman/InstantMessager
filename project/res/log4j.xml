@@ -42,11 +42,26 @@
         </layout>
     </appender>
 
+	<appender name="client" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="logs/client_work.log"/>
+		<param name="MaxFileSize" value="100MB"/>
+		<param name="MaxBackupIndex" value="100"/>
+		<param name="Encoding" value="UTF-8"/>
+		<layout class="org.apache.log4j.EnhancedPatternLayout">
+			<param name="ConversionPattern" value="%d{dd-MM-yyyy HH:mm:ss.SSS} %-20.20t %-5p %20.20c - %m%n"/>
+		</layout>
+	</appender>
+	
     <logger name="im.server">
         <level value="INFO"/>
         <appender-ref ref="server"/>
     </logger>
-
+	
+	<logger name="im.client">
+		<level value="INFO"/>
+		<appender-ref ref="client"/>
+	</logger>
+	
     <logger name="im.server.gui" additivity="false">
         <level value="INFO"/>
         <appender-ref ref="gui"/>
