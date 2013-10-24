@@ -69,6 +69,15 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				String to = receivedMessage.getToUser();
 				String text = receivedMessage.getMessage();
 				
+				if(!from.equals(selectedName)) {
+					if(!from.equals(userName)) {
+						Object[] options = { "Yes", "No" };
+						int n = JOptionPane.showOptionDialog(this, "New message from " + from, "New message", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+						
+						users.setSelectedValue(from, true);
+					}
+				}
+				
 				if (!text.isEmpty()) {
 					logger.info("Receiving message from server...");
 					if (selectedName != null && (from.equals(selectedName) || from.equals(userName))) {
