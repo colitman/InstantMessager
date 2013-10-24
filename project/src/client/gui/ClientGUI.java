@@ -63,6 +63,15 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				String to = receivedMessage.getToUser();
 				String text = receivedMessage.getMessage();
 				
+				if(!from.equals(selectedName)) {
+					if(!from.equals(userName)) {
+						Object[] options = { "Yes", "No" };
+						int n = JOptionPane.showOptionDialog(this, "New message from " + from, "New message", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+						
+						users.setSelectedValue(from, true);
+					}
+				}
+				
 				if (!text.isEmpty()) {
 					if (selectedName != null && (from.equals(selectedName) || from.equals(userName))) {
 						messages.append(DateFormat.getDateInstance().format(time) + " (" + from + ") : " + text + "\n");
