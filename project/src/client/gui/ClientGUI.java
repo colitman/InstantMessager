@@ -83,9 +83,11 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 					if (selectedName != null && (from.equals(selectedName) || from.equals(userName))) {
 						messages.append(DateFormat.getDateInstance().format(time) + " (" + from + ") : " + text + "\n");
 					} else {
-						usersModel.removeElement(from);
-						usersModel.addElement(from + "*");
-						nonReadedUsers.add(from);
+                        if (!nonReadedUsers.contains(from)) {
+                        	usersModel.removeElement(from);
+                            usersModel.addElement(from + "*");
+                            nonReadedUsers.add(from);
+                        }
 					}
 					
 					List<String> list = null;
@@ -257,7 +259,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		public void actionPerformed(ActionEvent event) {
 			logger.info("Sending message...");
 			output.println(userName);
-			output.println(users.getSelectedValue());
+			output.println(selectedName);
 			output.println(input.getText());
 			input.setText("");
 		}
