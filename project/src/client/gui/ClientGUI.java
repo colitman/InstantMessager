@@ -298,9 +298,15 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 	}
 	
 	private String checkName(String name) {
+		logger.info("Checking name...");
+		logger.info("Name - " + name);
 		if (!name.equals(null) && name.endsWith("*")) {
+			logger.info("Has been detected * in the end name");
+			logger.info("Return name - " + name.substring(0, name.length() - 1));
 			return name.substring(0, name.length() - 1);
 		}
+		logger.info("* has not been detected");
+		logger.info("Return name - " + name);
         return name;
 	}
 
