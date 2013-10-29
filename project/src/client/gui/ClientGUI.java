@@ -183,8 +183,8 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				logger.info("Selected user - " + selectedName);
 				
 				if (nonReadedUsers.contains(selectedName)) {
-                    usersModel.remove(selectedName + "*");
-                    usersModel.add(selectedName);
+                    usersModel.removeElement(selectedName + "*");
+                    usersModel.addElement(selectedName);
                     users.setSelectedValue(selectedName, true);
 					nonReadedUsers.remove(selectedName);
 				}
