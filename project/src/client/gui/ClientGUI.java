@@ -175,6 +175,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		
 			@Override
 			public void valueChanged(ListSelectionEvent event) {
+				logger.info("Selecting user with name - " + users.getSelectedValue());
 				selectedName = checkName(users.getSelectedValue());
 				
 				input.setEnabled(true);
@@ -261,10 +262,12 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		
 		public void actionPerformed(ActionEvent event) {
 			logger.info("Sending message...");
-			output.println(userName);
-			output.println(selectedName);
-			output.println(input.getText());
-			input.setText("");
+			if (selectedName != null) {
+				output.println(userName);
+				output.println(selectedName);
+				output.println(input.getText());
+				input.setText("");
+			}
 		}
 	}
 	
