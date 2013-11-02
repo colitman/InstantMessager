@@ -186,8 +186,10 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				if (nonReadedUsers.contains(selectedName)) {
                     usersModel.removeElement(selectedName + "*");
                     usersModel.addElement(selectedName);
-                    users.setSelectedValue(selectedName, true);
+					
 					nonReadedUsers.remove(selectedName);
+					users = new JList<String>(usersModel);
+                    users.setSelectedValue(selectedName, true);
 				}
 				if(selectedName != null) {
 					logger.info("Loading history...");
