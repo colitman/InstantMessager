@@ -65,7 +65,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				MessageType receivedMessage = (MessageType) message.getValue();
 				
 				Date time = receivedMessage.getTime();
-				String from = checkName(receivedMessage.getFromUser());
+				String from = receivedMessage.getFromUser();
 				String to = receivedMessage.getToUser();
 				String text = receivedMessage.getMessage();
 				
@@ -84,8 +84,6 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 						messages.append(DateFormat.getDateInstance().format(time) + " (" + from + ") : " + text + "\n");
 					} else {
                         if (!nonReadedUsers.contains(from)) {
-                        	usersModel.removeElement(from);
-                            usersModel.addElement(from + "*");
                             nonReadedUsers.add(from);
                         }
 					}
@@ -170,13 +168,26 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		input.addActionListener(new SendButtonListener(input, pipedOut));
 		
 		users = new JList<String>(usersModel);
+		users.setCellRenderer(new ListCellRenderer<String>() {
+			
+			protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
+			
+			@Override
+			public Component getListCellRendererComponent(JList<? extends String> list, String value, int index, boolean isSelected, boolean cellHasFocus) {
+				JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if (nonReadedUsers.contains(value)) {
+					renderer.setBackground(Color.YELLOW);
+				}
+				return renderer;
+			}
+		});
 		
 		ListSelectionListener listSelection = new ListSelectionListener() {
 		
 			@Override
 			public void valueChanged(ListSelectionEvent event) {
 				logger.info("Selecting user with name - " + users.getSelectedValue());
-				selectedName = checkName(users.getSelectedValue());
+				selectedName = users.getSelectedValue();
 				
 				input.setEnabled(true);
 				sendButton.setEnabled(true);
@@ -184,12 +195,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 				logger.info("Selected user - " + selectedName);
 				
 				if (nonReadedUsers.contains(selectedName)) {
-                    usersModel.removeElement(selectedName + "*");
-                    usersModel.addElement(selectedName);
-					
-					nonReadedUsers.remove(selectedName);
-					users = new JList<String>(usersModel);
-                    users.setSelectedValue(selectedName, true);
+                    nonReadedUsers.remove(selectedName);
 				}
 				if(selectedName != null) {
 					logger.info("Loading history...");
@@ -282,6 +288,7 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 			DataOutputStream dataOut = new DataOutputStream(out);
 		
 			Operations.sendFullHistory(history, dataOut);
+			logger.info("Save history at file : " + fileName);
 		} catch (Exception e) {
 			logger.warn("Failed to save history at file : " + fileName);
 		}
@@ -300,19 +307,6 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		} catch (Exception e) {
 			logger.warn("Failed to load history from file : " + fileName);
 		}
-	}
-	
-	private String checkName(String name) {
-		logger.info("Checking name...");
-		logger.info("Name - " + name);
-		if (!name.equals(null) && name.endsWith("*")) {
-			logger.info("Has been detected * in the end name");
-			logger.info("Return name - " + name.substring(0, name.length() - 1));
-			return name.substring(0, name.length() - 1);
-		}
-		logger.info("* has not been detected");
-		logger.info("Return name - " + name);
-        return name;
 	}
 
 }
