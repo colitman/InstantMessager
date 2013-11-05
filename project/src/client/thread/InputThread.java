@@ -17,9 +17,11 @@ import util.xml.message.*;
 public class InputThread extends Observable implements Runnable {
 	
 	private DataInputStream input;
+	private static InputThread thread;
 	
 	public InputThread(DataInputStream in) {
 		input = in;
+		thread = this;
 	}
 	
 	public void run() {
@@ -37,6 +39,10 @@ public class InputThread extends Observable implements Runnable {
 			setChanged();
 			notifyObservers(message);
 		}
+	}
+	
+	public static InputThread getInput() {
+		return thread;
 	}
 		
 }

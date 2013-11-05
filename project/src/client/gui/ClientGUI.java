@@ -47,6 +47,10 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 	private Map<String, List<String>> history;
 	private List<String> nonReadedUsers;
 	
+	public List<String> getNonRead() {
+		return nonReadedUsers;
+	}
+	
 	public ClientGUI(PrintWriter output, String name, DataOutputStream out) {
 		super("Client - " + name);
 		
@@ -168,19 +172,20 @@ public class ClientGUI extends JFrame implements Observer, Runnable {
 		input.addActionListener(new SendButtonListener(input, pipedOut));
 		
 		users = new JList<String>(usersModel);
-		users.setCellRenderer(new ListCellRenderer<String>() {
+		users.setCellRenderer(new UserListCellRenderer(this));
+		// users.setCellRenderer(new ListCellRenderer<String>() {
 			
-			protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
+			// protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
 			
-			@Override
-			public Component getListCellRendererComponent(JList<? extends String> list, String value, int index, boolean isSelected, boolean cellHasFocus) {
-				JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-				if (nonReadedUsers.contains(value)) {
-					renderer.setBackground(Color.YELLOW);
-				}
-				return renderer;
-			}
-		});
+			// @Override
+			// public Component getListCellRendererComponent(JList<String> list, String value, int index, boolean isSelected, boolean cellHasFocus) {
+				// JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				// if (nonReadedUsers.contains(value)) {
+					// renderer.setBackground(Color.YELLOW);
+				// }
+				// return renderer;
+			// }
+		// });
 		
 		ListSelectionListener listSelection = new ListSelectionListener() {
 		
